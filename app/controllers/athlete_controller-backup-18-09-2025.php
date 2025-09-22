@@ -3886,10 +3886,6 @@ La segreteria
 
         $campionato = [];
         $squadra = [];
-		//GIUSEPPE 2025-09-21 ------------------------------------------------------------------------------
-		$tipi_assicurazione = $this->tipiAssicurazione();
-		//--------------------------------------------------------------------------------------------------
-
         foreach ($res['array'] as &$infoAtleta)
         {
             if ($infoAtleta['IdManifestazione'] == "")
@@ -3955,13 +3951,8 @@ La segreteria
                 $toInsert['Atleta'] = $Atleta;
                 $toInsert['Tessera'] = sprintf("%s%s%s%s", substr($AnnoSportivo, 2), rand(), rand(), rand());
                 $toInsert['SquadraCampionato'] = $SquadraCampionato;
-                //$toInsert['TipoAssicurazione'] = 1;
-
-				//GIUSEPPE 2025-09-21 ------------------------------------------------------------------------------
-				$toInsert['TipoAssicurazione'] = $tipi_assicurazione[$infoAtleta['TipoAssicurazione']]['TipoAssicurazione'];
-				//--------------------------------------------------------------------------------------------------
-                
-				$toInsert['DataVidimazione'] = date("Y-m-d");
+                $toInsert['TipoAssicurazione'] = 1;
+                $toInsert['DataVidimazione'] = date("Y-m-d");
                 $toInsert['group_id'] = 1;
                 $respInsert = $this->insert_into("Annuario", $toInsert, true);
                 $infoAtleta['Annuario'] = $respInsert['last_id'];
@@ -3974,20 +3965,6 @@ La segreteria
         }
     }
 
-	//GIUSEPPE 2025-09-21 ------------------------------------------------------------------------------
-	private function tipiAssicurazione()
-	{
-		$query = "	SELECT
-						TipoAssicurazione,
-						Simbolo
-					FROM
-						`TipiAssicurazione`";
-
-		$res = $this->key_select($this->select_sql($query),"Simbolo");
-
-		return $res;
-	}
-	//--------------------------------------------------------------------------------------------------
 
 				/* ------------------------ */
 }

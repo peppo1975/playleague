@@ -591,9 +591,11 @@ class SectionsController extends AppController
 
 
             $this->Email->to = array(
-                "info@playleaguesport.it",
+                "info@midlandeuropa.com",
                 "timmytag@gmail.com"
             );
+
+//            $this->Email->from = 'Midland Global Sport SSDRL <noreply@midlandeuropa.com>';
 
             /* fixed edit */
             $this->Email->from = $fixed['societa_nome'] . ' <' . $fixed['email_automatic'] . '>';
@@ -606,6 +608,7 @@ class SectionsController extends AppController
 
             /* email per acquirente */
             $this->Email->to = array($product["email"]);
+//          $this->Email->from = 'Midland Global Sport SSDRL <noreply@midlandeuropa.com>';
 
             /* fixed edit */
             $this->Email->from = $fixed['societa_nome'] . ' <' . $fixed['email_automatic'] . '>';
@@ -975,7 +978,7 @@ class SectionsController extends AppController
                     'Campionati.InCorso' => 'Si',
                     'Campionati.group_id' => 1,
                     'Campionati.scuola' => 0,
-                    'Campionati.PlayLeague' => 1, //GIUSEPPE 2022-09-13 
+                    'Campionati.PlayLeague' => 0, //GIUSEPPE 2022-09-13 
                     'OR' => array(array('Campionati.sport' => 'CALCIO'), array('Campionati.sport' => 'BASKET')),
                 ),
                 'order' => array('Campionati.order ASC'),
@@ -1314,7 +1317,7 @@ class SectionsController extends AppController
         return $squadre;
     }
 
-    // GIUSEPPE 2024-07-06 -----------------------------------------------------------
+    //GIUSEPPE 2024-07-06 -----------------------------------------------------------
     
     function getSquadre() //GIUSEPPE 2024-07-06
     {
@@ -1464,8 +1467,86 @@ class SectionsController extends AppController
         
         return $res;
     }
-	
-	// ---------------------------------------------------------------- 
+    
+    //--------------------------------------------------------------------------------
+            
+    function _getSquadre($tipo, $sessoTipo = 0, $anno = null) //GIUSEPPE 2017-04-06 riscritta la funzione getSquadre()
+    
+    {
+
+        $this->layout = "content";
+
+        if ($anno == null)
+        {
+
+            $anni = $this
+                ->AnniSportivi
+                ->find('list', array(
+                'order' => 'AnniSportivi.AnnoSportivo DESC',
+                'limit' => 1
+            ));
+            $anno = $anni[key($anni) + 1];
+            $anno_string = $anno;
+            $this->set('anno_s', $anno);
+        }
+        elseif ($anno == 'all')
+        {
+
+            $anno = '';
+            $anno_string = '';
+        }
+        else
+        {
+
+            $anno_string = $anno;
+            $this->set('anno_s', $anno);
+        }
+
+        $this->set('years', $this
+            ->AnniSportivi
+            ->find('list', array(
+            'order' => 'AnniSportivi.AnnoSportivo DESC'
+        )));
+
+        $alfabeto = array();
+
+        $squadre_database = $this->read_all_teams($tipo, $sessoTipo, $anno);
+
+        $squadre = $this->sort_squadre($squadre_database);
+
+        //echo json_encode($squadre);
+        //exit;
+        foreach ($squadre as $squadra)
+        {
+
+            $nome = $squadra['Squadre']['Denominazione'];
+
+            $start = substr(trim($nome) , 0, 1);
+
+            $end = substr(trim($nome) , 1, 2);
+
+            // - - controllo i valori ascii  - - - - -
+            if (ord($start) >= 65 && ord($start) <= 90 || ord($start) >= 97 && ord($start) <= 122)
+            {
+                $chiave = Inflector::Slug($start);
+            }
+            else
+            {
+                $chiave = null;
+            }
+
+            $alfabeto[strtoupper($chiave) ][] = $squadra;
+
+            $json_data['timestamp'] = time();
+
+            $json_data['data'] = $alfabeto;
+
+            //  file_put_contents(APP . '/webroot/files/json_frontend/get_squadre_' . $tipo . '_' . $sessoTipo . '_' . $anno_string . '.json', json_encode($json_data));
+            
+        }
+
+        $this->set('alfabeto', $alfabeto);
+    }
 
     function getSquadreAjax($tipo, $sessoTipo)
     {
@@ -1629,7 +1710,7 @@ class SectionsController extends AppController
 
     }
 
-	function getNotes($match_id, $squadra_id)
+    function getNotes($match_id, $squadra_id)
     {
 
         $this->layout = "pdf";
@@ -1638,62 +1719,72 @@ class SectionsController extends AppController
 
         $squadra = $this->SquadreCampionati->findBySquadracampionato($squadra_id);
 
-
-        //GIUSEPPE 2022-09-13
-//
-//        $partecipanti = $this->Athlete->query('
-//            
-//            
-//            SELECT Athlete.Nome,Athlete.Cognome,Annuario.Tessera AS Athlete__Tessera FROM Atleti AS Athlete,Annuario 
-//            
-//            WHERE Annuario.Atleta = Athlete.Atleta AND Annuario.SquadraCampionato = ' . $squadra_id . ' AND Annuario.AnnoSportivo = (SELECT MAX(AnnoSportivo) FROM Annuario)
-//            
-//            ORDER BY Athlete.Cognome ASC, Athlete.Nome ASC
-//            
-//            ');
-        
-
         //GIUSEPPE 2024-08-30
 
         $city = $this->key_select($this->select_sql("SELECT id, city_name FROM city"),'id') ;
 
-        $query = '
-                        SELECT
-                            Athlete.Nome,
-                            Athlete.Cognome,
-                            Athlete.DataNascita,
-                            Athlete.Sesso,
-                            Athlete.CityNascita,
-                            Annuario.Tessera AS Athlete__Tessera
-                        FROM
-                            Atleti AS Athlete,
-                            Annuario
-                        WHERE
-                            Annuario.Atleta = Athlete.Atleta AND Annuario.SquadraCampionato = ' . $squadra_id . ' AND Annuario.AnnoSportivo =(
-                            SELECT
-                                MAX(AnnoSportivo)
-                            FROM
-                                Annuario
-                        )
-                        ORDER BY
-                            Athlete.Cognome ASC,
-                            Athlete.Nome ASC
-            ';
+        // $query = '
+        //                 SELECT
+        //                     Athlete.Nome,
+        //                     Athlete.Cognome,
+        //                     Athlete.DataNascita,
+        //                     Athlete.Sesso,
+        //                     Athlete.CityNascita,
+        //                     Annuario.Tessera AS Athlete__Tessera
+        //                 FROM
+        //                     Atleti AS Athlete,
+        //                     Annuario
+        //                 WHERE
+        //                     Annuario.Atleta = Athlete.Atleta AND Annuario.SquadraCampionato = ' . $squadra_id . ' AND Annuario.AnnoSportivo =(
+        //                     SELECT
+        //                         MAX(AnnoSportivo)
+        //                     FROM
+        //                         Annuario
+        //                 )
+        //                 ORDER BY
+        //                     Athlete.Cognome ASC,
+        //                     Athlete.Nome ASC
+        //     ';
+
+
+
+	
+        //GIUSEPPE 2025-09-21 ------------------------------------------------------------------------------
+        include_once __DIR__ . "/../models/api.php";
+		$api = new Api();
+        $anno_sportivo = $api->annoSportivo();
+        $current = $anno_sportivo['current']['year'];
+
+        $this->write_file("anno_sportivo",$anno_sportivo);
+
+        $query = "  SELECT
+                        Athlete.Nome,
+                        Athlete.Cognome,
+                        Athlete.DataNascita,
+                        Athlete.Sesso,
+                        Athlete.CityNascita,
+                        Annuario.Tessera AS Athlete__Tessera,
+                        TipiAssicurazione.Simbolo
+                    FROM
+                        Atleti AS Athlete
+                    INNER JOIN Annuario ON Annuario.Atleta = Athlete.Atleta
+                    INNER JOIN TipiAssicurazione ON Annuario.TipoAssicurazione = TipiAssicurazione.TipoAssicurazione
+                    WHERE
+                        Annuario.SquadraCampionato = '{$squadra_id}' AND Annuario.AnnoSportivo = {$current}
+                    ORDER BY
+                        Athlete.Cognome ASC,
+                        Athlete.Nome ASC
+                    ";
+        // -------------------------------------------------------------------------------------------------
 
         $partecipanti = $this->Athlete->query($query);
 
-//        $squalificati = json_decode(file_get_contents((APP . "/webroot/files/json/disciplinari/disciplinare_" . $partita['Half']['Campionato'] . "_" . $partita['Half']['GironeCampionato'] . ".json")), TRUE);
-//        ;
         file_put_contents(ROOT . DS . "squalificati.log", print_r($squalificati, true), FILE_APPEND);
         $this->set('squadra_id', $squadra_id);
         $this->set('partita', $partita);
         $this->set('squadra', $squadra);
         $this->set('partecipanti', $partecipanti);
         $this->set('city', $city);
-        // $this->write_file("partecipanti.txt",$partecipanti);
-        // $this->write_file("partecipanti_query.txt",$query);
-        // $this->write_file("partecipanti_city.txt",$city);
-        //$this->set('squalificati', $squalificati);
        
         //GIUSEPPE 2022-12-23 - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         $squalificati = $this->filtraSqualificati($match_id, $squadra_id, $partita, $squadra);
@@ -2241,7 +2332,7 @@ class SectionsController extends AppController
             );
 
             $this
-                ->Email->from = 'Play League SSDARL <noreply@playleaguesport.it>';
+                ->Email->from = 'Midland Global Sport SSDRL <noreply@midlandeuropa.com>';
 
             $this
                 ->Email->subject = 'Notifica tesseramento e verifica dati';
@@ -2473,8 +2564,8 @@ class SectionsController extends AppController
         $email_payor = file_get_contents(APP . '/webroot/files/json/email_payor_' . $uniqid . '.json');
 
         $emails = array(
-            'info@playleaguesport.it',
-            'redazione@playleaguesport.it',
+            'info@midlandsport.it',
+            'redazione@midlandsport.it',
             'timmytag@gmail.com',
             $email_payor
         );
@@ -2488,7 +2579,7 @@ class SectionsController extends AppController
                 $this
                     ->Email->to = $emails;
                 $this
-                    ->Email->from = 'Play League SSDARL <info@playleaguesport.it>';
+                    ->Email->from = 'Midland Global Sport SSDRL <noreply@midlandeuropa.com>';
                 $this
                     ->Email->subject = 'Notifica nuovi tesseramenti';
                 $this
@@ -2516,7 +2607,7 @@ class SectionsController extends AppController
                 $this
                     ->Email->to = $emails;
                 $this
-                    ->Email->from = 'Play League SSDARL <info@playleaguesport.it>';
+                    ->Email->from = 'Midland Global Sport SSDRL <noreply@midlandeuropa.com>';
                 $this
                     ->Email->subject = 'Notifica nuova iscrizione';
                 $this
@@ -6907,7 +6998,7 @@ class SectionsController extends AppController
             $this
                 ->Email->to = $_POST['bookerEmail'];
             $this
-                ->Email->from = 'Play League SSDARL <noreply@playleaguesport.it>';
+                ->Email->from = 'Midland Global Sport SSDRL <noreply@midlandeuropa.com>';
             $this
                 ->Email->subject = 'Notifica prenotazione campo';
             $this
@@ -6921,7 +7012,7 @@ class SectionsController extends AppController
                 $this
                     ->Email->to = $campo['Campi']['EmailGestore'];
                 $this
-                    ->Email->from = 'Play League SSDARL <noreply@playleaguesport.it>';
+                    ->Email->from = 'Midland Global Sport SSDRL <noreply@midlandeuropa.com>';
                 $this
                     ->Email->subject = 'Notifica di prenotazione campo da parte di ' . $_POST['bookerNome'] . " " . $_POST['bookerCognome'];
                 $this
@@ -7243,7 +7334,23 @@ class SectionsController extends AppController
 
     function passrecovery($action = "", $state)
     {
-
+        //GIUSEPPE 2024-04-12 --------------------------------------------
+         if($action == "user" && $_POST['g-recaptcha-response']=="")
+         {
+             $_POST['data']['User']['username'] = "-";
+             $_POST['data']['User']['nome'] = "-";
+             $_POST['data']['User']['cognome'] = "-";
+             
+             $this->data['User']['username'] = "-";
+             $this->data['User']['nome'] = "-";
+             $this->data['User']['cognome'] = "-";
+         }
+       
+                $this->write_file("POST_CATPTCHA", $_POST);
+                $this->write_file("POST_CATPTCHA_state", [$action,$state]);
+                $this->write_file("POST_CATPTCHA_data", $this->data);
+        //----------------------------------------------------------------
+         
         /* fixed add */
 
         $fixed = $this->requestAction('fixeds/read_all_fixed'); //GIUSEPPE 2018-08-28 -- richiama la tabella dei contenuti fissi
@@ -7288,6 +7395,7 @@ class SectionsController extends AppController
             $this->set('newpass', $newpass);
             $this->Email->to = $udata['username'];
 
+            /* $this->Email->from = 'Midland Global Sport SSDRL <noreply@midlandeuropa.com>'; */
 
             /* fixed edit */
             $this->Email->from = $fixed['societa_nome'] . ' <' . $fixed['email_automatic'] . '>';
@@ -7576,8 +7684,8 @@ class SectionsController extends AppController
         //  }
         //}
         
-        if($nameServer == 'dev.playleaguesport.it')
-            $nameServer = 'www.playleaguesport.it';
+        if($nameServer == 'dev.midlandsport.it')
+            $nameServer = 'www.midlandsport.it';
         
         if($nameServer == 'dev.mgstennis.it')
             $nameServer = 'www.mgstennis.it';
@@ -7592,10 +7700,10 @@ class SectionsController extends AppController
         );
 
         $listServerName = array(
-            'www.playleaguesport.it',
+            'www.midlandsport.it',
             'www.midlandgs.it',
             'www.mgstennis.it',
-            'playleaguesport.it',
+            'midlandsport.it',
             'midlandgs.it',
             'mgstennis.it'
         );

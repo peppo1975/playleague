@@ -201,36 +201,43 @@ if (count($squalificati_giornata)) {
 $fpdf->SetY(96 + $offset);
 $fpdf->SetX(10);
 ob_start();
+?>
+<table border="0" width="194px" border=1>
+    <tr>
+        <td style="bold" width="15mm"><b>Riservato <br>all'arbitro</b></td>
+        <td style="bold" width="20mm"><b>Numero/<br>Dir/Tec*</b></td>
+        <td style="bold" width="60px"><b>Cognome e Nome</b></td>
+        <td style="bold" width="13"><b>Data di nascita</b></td>
+        <td style="bold" width="5"><b>Luogo di nascita</b></td>
+        <td style="bold" width="5"><b>Sesso</b></td>
+        <td style="bold" width="5"><b>Cap./<br>v. cap</b></td>
+        <td style="bold" width="15"><b>N. tessera/<br>Documento</b></td>
+    </tr>
+</table>
 
+<?
 
 $t = ob_get_contents();
 ob_end_clean();
+// $fpdf->htmltable($t);
 
 $fpdf->SetFont('Calibri', 'B', 10);
-
-// OLD
-// $l_1 = 21 - 4;  // ris arbitro
-// $l_2 = 20;      // numero/dir tec
-// $l_3 = 68 - 12; // cognome e nome
-// $l_4 = 19 ;     // data di nascita
-// $l_5 = 18 + 4 + 9 ; // luogo di nascita
-// $l_6 = 5; // s
-// $l_7 = 18; // cap
-// $l_8 = 29 - 9; // n.tessera
-// //tot = 186
-
-//GIUSEPPE 2025-09-21 --------------------
-$l_1 = 17; // ris arbitro
-$l_2 = 17; // numero/dir tec
-$l_3 = 56; // cognome e nome
-$l_4 = 19; // data di nascita
-$l_5 = 34; // luogo di nascita
-$l_6 = 5;  // sesso
-$l_7 = 15; // cap
-$l_8 = 20; // n. tessera
-$l_9 = 10; // tipo assicurazione
-// ----------------------------------------
-
+// $l_1 = 21;
+// $l_2 = 20;
+// $l_3 = 68;
+// $l_4 = 19;
+// $l_5 = 18;
+// $l_6 = 5;
+// $l_7 = 18;
+// $l_8 = 29;
+$l_1 = 21 - 4;
+$l_2 = 20;
+$l_3 = 68 - 12;
+$l_4 = 19 ;
+$l_5 = 18 + 4 + 9 ;
+$l_6 = 5;
+$l_7 = 18;
+$l_8 = 29 - 9;
 
 $x = $fpdf->GetX();
 $y = $fpdf->GetY();
@@ -264,17 +271,20 @@ $x = $fpdf->GetX();
 $fpdf->SetXY($x + $l_1 + $l_2 + $l_3 + $l_4 + $l_5 + $l_6 + $l_7, $y);
 $fpdf->MultiCell($l_8, 4, "N. tessera/ Documento", 1, 1);
 
-//GIUSEPPE 2025-09-21 --------------------
-$x = $fpdf->GetX();
-$fpdf->SetXY($x + $l_1 + $l_2 + $l_3 + $l_4 + $l_5 + $l_6 + $l_7 + $l_8, $y);
-$fpdf->MultiCell($l_9, 4, "Tipo Ass.", 1, 1);
-// ---------------------------------------
 
-$l_tot = $l_1 + $l_2 + $l_3 + $l_4 + $l_5 + $l_6 + $l_7 + $l_8 + $l_9; //GIUSEPPE 2025-09-21 ----- $l_9 --------------------
+
+// $fpdf->Cell($l_4, 8, sprintf("%s/%s/%s", $data_nascita[2], $data_nascita[1], $data_nascita[0]), 1);
+// $fpdf->Cell($l_5, 8, "", 1);
+// $fpdf->Cell($l_6, 8, "", 1);
+ //$fpdf->Ln();
+
+$l_tot = $l_1 + $l_2 + $l_3 + $l_4 + $l_5 + $l_6 + $l_7 + $l_8;
 
 $num_righe = 20;
 $num_righe_fine_pagina = 30;
 
+//$partecipanti[] = $partecipanti[0];
+//if (count($partecipanti) > 0):
 $fpdf->SetFont('Calibri', '', 10);
 
 foreach ($partecipanti as $partecipante):
@@ -293,7 +303,6 @@ foreach ($partecipanti as $partecipante):
         $fpdf->Cell($l_6, 5, $partecipante['Athlete']['Sesso'][0], 1);
         $fpdf->Cell($l_7, 5, "", 1);
         $fpdf->Cell($l_8, 5, "", 1);
-        $fpdf->Cell($l_9, 5, $partecipante['TipiAssicurazione']['Simbolo'], 1); //GIUSEPPE 2025-09-21 -----
 
         $fpdf->Ln();
 
@@ -323,15 +332,19 @@ for ($i = 0; $i < $righe_vuote; $i++):
     $fpdf->Cell($l_6, 5, "", 1);
     $fpdf->Cell($l_7, 5, "", 1);
     $fpdf->Cell($l_8, 5, "", 1);
-    $fpdf->Cell($l_9, 5, "", 1); //GIUSEPPE 2025-09-21 -----
     $fpdf->Ln();
 
 endfor;
 
+//endif;
 
 $fpdf->Cell($l_tot, 5, "*Indicare il numero di maglia del giocatore o segnalare se Dirigente con sigla DIR. o tecnico/allenatore con sigla TEC.", 1);
 $fpdf->Ln();
 
+//if ($fpdf->GetY() > 215)
+//{
+//   $fpdf->AddPage();
+//}
 
 $image_H = 53;
 $fpdf->Cell($l_tot, $image_H + 1, "", 1); // contenitore dell'immagine
@@ -348,5 +361,7 @@ if ($fpdf->PageNo() % 2 == 1) {
     $fpdf->AddPage();
 }
 
+//$fpdf->Ln();
+// 
 ?>
 <? $fpdf->Output(Inflector::slug($partita['Match']['CasaNome']) . "-" . Inflector::slug($partita['Match']['TrasfertaNome']) . "-" . Inflector::slug($partita['Match']['Data_it']) . "-$squadra_id.pdf", 'I'); ?>
