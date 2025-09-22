@@ -3712,6 +3712,8 @@ La segreteria
 
 					$res = $_POST;
 
+				//        $girone = $_POST['girone'];
+
 					$res['upload'] = "KO";
 
 					$exe = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
@@ -3872,153 +3874,120 @@ La segreteria
 					}
 
 
-					private function analizzaCampionato(&$res)
-					{
-						include_once __DIR__ . "/../models/api.php";
+    private function analizzaCampionato(&$res)
+    {
+        include_once __DIR__ . "/../models/api.php";
 
-						$api = new Api();
-						$anno_sportivo = $api->annoSportivo();
-						$anno = $anno_sportivo['current']['year'];
+        $api = new Api();
 
-						// 1) Prepara mapping Simbolo -> TipoAssicurazione (ID)
-						$mapSimboloToId = array();
-						$rowsTipi = $this->select_sql("SELECT TipoAssicurazione, Simbolo FROM TipiAssicurazione");
-						foreach ((array)$rowsTipi as $r) {
-							$sim = strtoupper(trim($r['Simbolo']));
-							$id  = (int)$r['TipoAssicurazione'];
-							if ($sim !== '') {
-								$mapSimboloToId[$sim] = $id;
-							}
-						}
+        $anno_sportivo = $api->annoSportivo();
 
-						// 2) Prepara liste campionato/squadra come facevi già
-						$campionato = array();
-						$squadra    = array();
-						foreach ($res['array'] as &$infoAtleta) {
-							if ($infoAtleta['IdManifestazione'] == "") {
-								continue;
-							}
-							$campionato[$infoAtleta['IdSquadra']] = $infoAtleta['IdManifestazione'];
-							$squadra[$infoAtleta['IdSquadra']]    = $infoAtleta['IdSquadra'];
-							$infoAtleta['AnnoSportivo']           = $anno;
-							$infoAtleta['Annuario']               = 0; // se non viene aggiornato, segna errore nell’upload
-						}
+        $anno = $anno_sportivo['current']['year'];
 
-						$res['gare'] = ['Campionato' => $campionato, 'Squadra' => $squadra];
-						$squadre     = implode(',', $squadra);
-						$campionati  = implode(',', $campionato);
+        $campionato = [];
+        $squadra = [];
+		//GIUSEPPE 2025-09-21 ------------------------------------------------------------------------------
+		$tipi_assicurazione = $this->tipiAssicurazione();
+		//--------------------------------------------------------------------------------------------------
 
-						$querySquadreCampionato = "
-							SELECT *
-							FROM `SquadreCampionati`
-							WHERE Campionato IN({$campionati})
-							  AND Squadra IN({$squadre})
-						";
-						$squadreCampionati = $this->select_sql($querySquadreCampionato);
-						$res['squadreCampionati']      = $squadreCampionati;
-						$res['squadreCampionatiQuery'] = $querySquadreCampionato;
+        foreach ($res['array'] as &$infoAtleta)
+        {
+            if ($infoAtleta['IdManifestazione'] == "")
+            {
+                continue;
+            }
 
-						// mappa Campionato->(Squadra->SquadraCampionato)
-						$scElenco = array();
-						foreach ($squadreCampionati as $sc) {
-							$scElenco[$sc['Campionato']][$sc['Squadra']] = $sc['SquadraCampionato'];
-						}
+            $campionato[$infoAtleta['IdSquadra']] = $infoAtleta['IdManifestazione'];
 
-						// 3) Per ogni riga importata, crea/recupera l’Annuario con il TipoAssicurazione mappato dal simbolo XLSX
-						foreach ($res['array'] as &$infoAtleta) {
-							if ($infoAtleta['IdManifestazione'] == "") {
-								continue;
-							}
+            $squadra[$infoAtleta['IdSquadra']] = $infoAtleta['IdSquadra'];
+            $infoAtleta['AnnoSportivo'] = $anno;
 
-							// risolvi SquadraCampionato
-							if (!isset($scElenco[$infoAtleta['IdManifestazione']][$infoAtleta['IdSquadra']])) {
-								$infoAtleta['Annuario'] = -1; // segna errore
-								continue;
-							}
-							$infoAtleta['SquadraCampionato'] = $scElenco[$infoAtleta['IdManifestazione']][$infoAtleta['IdSquadra']];
-
-							$AnnoSportivo      = (int)$infoAtleta['AnnoSportivo'];
-							$Atleta            = (int)$infoAtleta['AtletaId'];
-							$SquadraCampionato = (int)$infoAtleta['SquadraCampionato'];
-
-							if ($Atleta === 0 || $Atleta === null) {
-								$infoAtleta['Annuario'] = -2; // atleta non risolto
-								continue;
-							}
-
-							// --- NUOVO: leggi simbolo da Excel e mappa all'ID ---
-							$simboloExcel = '';
-							if (isset($infoAtleta['TipoAssicurazione'])) {
-								$simboloExcel = strtoupper(trim((string)$infoAtleta['TipoAssicurazione']));
-							}
-
-							// default BP=1 se simbolo mancante/non valido
-							$tipoAssicurazioneId = 1;
-							if ($simboloExcel !== '' && isset($mapSimboloToId[$simboloExcel])) {
-								$tipoAssicurazioneId = $mapSimboloToId[$simboloExcel];
-							} else {
-								// tieni traccia di simboli non riconosciuti
-								if (!empty($simboloExcel)) {
-									$res['warning_tipo_ass'][] = array(
-										'AtletaId' => $Atleta,
-										'Simbolo'  => $simboloExcel,
-										'Msg'      => 'Simbolo assicurazione non riconosciuto: uso default BP (1)'
-									);
-								}
-							}
-
-							// cerca Annuario esistente per (Atleta,SquadraCampionato)
-							$queryAnnuario = "
-								SELECT *, COUNT(Annuario) AS NumRows
-								FROM Annuario
-								WHERE Atleta = '{$Atleta}'
-								  AND SquadraCampionato = '{$SquadraCampionato}'
-							";
-							$resAnnuario = $this->select_sql($queryAnnuario);
-							$rowAnn = $resAnnuario ? $resAnnuario[0] : array('NumRows' => 0);
-
-							if ((int)$rowAnn['NumRows'] === 0) {
-								// INSERT
-								$toInsert = array();
-								$toInsert['AnnoSportivo']       = $AnnoSportivo;
-								$toInsert['Atleta']             = $Atleta;
-								$toInsert['Tessera']            = sprintf("%s%s%s%s", substr($AnnoSportivo, 2), rand(), rand(), rand());
-								$toInsert['SquadraCampionato']  = $SquadraCampionato;
-								$toInsert['TipoAssicurazione']  = $tipoAssicurazioneId; // <-- qui l'ID derivato dal simbolo XLSX
-								$toInsert['DataVidimazione']    = date("Y-m-d");
-								$toInsert['group_id']           = 1;
-
-								$respInsert = $this->insert_into("Annuario", $toInsert, true);
-								$infoAtleta['Annuario'] = $respInsert['last_id'];
-							} else {
-								// RECORD ESISTENTE: se nel file XLSX è presente un simbolo valido e diverso dall’attuale, aggiorna
-								$infoAtleta['Annuario'] = (int)$rowAnn['Annuario'];
-
-								if ($simboloExcel !== '' && isset($mapSimboloToId[$simboloExcel])) {
-									$currentId = (int)$rowAnn['TipoAssicurazione'];
-									if ($currentId !== $tipoAssicurazioneId) {
-										// usa una tua funzione di esecuzione update; se non l'hai, riusa insert_into con una tua update wrapper
-										$sqlUpd = "
-											UPDATE Annuario
-											SET TipoAssicurazione = {$tipoAssicurazioneId}
-											WHERE Annuario = {$infoAtleta['Annuario']}
-										";
-										// Se hai una funzione ad-hoc usala; altrimenti, se select_sql accetta anche UPDATE, va bene così:
-										$this->select_sql($sqlUpd);
-
-										$res['updated_tipo_ass'][] = array(
-											'Annuario' => $infoAtleta['Annuario'],
-											'Atleta'   => $Atleta,
-											'Da'       => $currentId,
-											'A'        => $tipoAssicurazioneId
-										);
-									}
-								}
-							}
-						}
-					}
+            $infoAtleta['Annuario'] = 0; // se non viene aggiornato, segnerà errore nella pagina dell' upload
+        }
 
 
+
+        $res['gare'] = ['Campionato' => $campionato, 'Squadra' => $squadra];
+        $squadre = implode(',', $squadra);
+        $campionati = implode(',', $campionato);
+
+//        $querySquadreCampionato = "SELECT * FROM `SquadreCampionati` WHERE Campionato = '{$campionato}'  AND Squadra IN({$squadre})";
+        $querySquadreCampionato = "SELECT * FROM `SquadreCampionati` WHERE Campionato IN({$campionati})  AND Squadra IN({$squadre})";
+
+        $squadreCampionati = $this->select_sql($querySquadreCampionato);
+        $res['squadreCampionati'] = $squadreCampionati;
+        $res['squadreCampionatiQuery'] = $querySquadreCampionato;
+
+        $scElenco = [];
+        foreach ($squadreCampionati as $sc)
+        {
+//            $scElenco[$sc['Squadra']] = $sc['SquadraCampionato'];
+            $scElenco[$sc['Campionato']][$sc['Squadra']] = $sc['SquadraCampionato'];
+        }
+
+
+        foreach ($res['array'] as &$infoAtleta)
+        {
+            if ($infoAtleta['IdManifestazione'] == "")
+            {
+                continue;
+            }
+
+//            $infoAtleta['SquadraCampionato'] = $scElenco[$infoAtleta['IdSquadra']];
+            $infoAtleta['SquadraCampionato'] = $scElenco[$infoAtleta['IdManifestazione']][$infoAtleta['IdSquadra']];
+
+            $AnnoSportivo = $infoAtleta['AnnoSportivo'];
+            $Atleta = $infoAtleta['AtletaId'];
+            $SquadraCampionato = $infoAtleta['SquadraCampionato'];
+
+            if (!isset($scElenco[$infoAtleta['IdManifestazione']][$infoAtleta['IdSquadra']]))
+            {
+                $infoAtleta['Annuario'] = -1;
+                continue;
+            }
+
+            $queryAnnuario = "SELECT *, COUNT(Annuario) AS NumRows FROM Annuario WHERE Atleta = '{$Atleta}' AND SquadraCampionato = '{$SquadraCampionato}'";
+            $resAnnuario = $this->select_sql($queryAnnuario)[0];
+
+            if ($resAnnuario['NumRows'] == 0 && $Atleta !== 0 && $Atleta !== null)
+            {
+                $toInsert['AnnoSportivo'] = $AnnoSportivo;
+                $toInsert['Atleta'] = $Atleta;
+                $toInsert['Tessera'] = sprintf("%s%s%s%s", substr($AnnoSportivo, 2), rand(), rand(), rand());
+                $toInsert['SquadraCampionato'] = $SquadraCampionato;
+                //$toInsert['TipoAssicurazione'] = 1;
+
+				//GIUSEPPE 2025-09-21 ------------------------------------------------------------------------------
+				$toInsert['TipoAssicurazione'] = $tipi_assicurazione[$infoAtleta['TipoAssicurazione']]['TipoAssicurazione'];
+				//--------------------------------------------------------------------------------------------------
+                
+				$toInsert['DataVidimazione'] = date("Y-m-d");
+                $toInsert['group_id'] = 1;
+                $respInsert = $this->insert_into("Annuario", $toInsert, true);
+                $infoAtleta['Annuario'] = $respInsert['last_id'];
+            }
+
+            if ($resAnnuario['NumRows'] > 0)
+            {
+                $infoAtleta['Annuario'] = (int) $resAnnuario['Annuario'];
+            }
+        }
+    }
+
+	//GIUSEPPE 2025-09-21 ------------------------------------------------------------------------------
+	private function tipiAssicurazione()
+	{
+		$query = "	SELECT
+						TipoAssicurazione,
+						Simbolo
+					FROM
+						`TipiAssicurazione`";
+
+		$res = $this->key_select($this->select_sql($query),"Simbolo");
+
+		return $res;
+	}
+	//--------------------------------------------------------------------------------------------------
 
 				/* ------------------------ */
 }
