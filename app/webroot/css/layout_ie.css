@@ -1,0 +1,6 @@
+#main-menu { margin-top: 70px; }
+
+#secondary-menu { text-align: right; }
+#secondary-menu .left-menu, #secondary-menu .left-menu li { position: relative; z-index: 999; }
+
+.wrapper-box { position: static; /* risolve le select su ie7 */ }

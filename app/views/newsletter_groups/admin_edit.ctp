@@ -1,0 +1,57 @@
+
+	<?=$this->element("/backend/edit_scripts");?>
+
+	<?=$this->Form->create('NewsletterGroup', array('action' => 'edit','prefix' => 'admin','class' => 'formAdd','type' => 'file'));?>
+
+	<div class="form_header">
+
+								<h2>Modifica gruppo newsletter</h2>
+								<ul>
+	
+									<li><?=$this->Form->submit('reset campi',array('type'=>'reset','div' =>false));?></li>
+									<li><?=$this->Form->submit('annulla',array('type' => 'button','div' => false,'id' => 'formReset'));?></li>
+									<li><?=$this->Form->submit('salva',array('type' => 'submit','div' => false));?></li>
+								</ul>
+								<div class="clear"></div>
+
+	</div><!-- close form_header -->
+	<?=$this->Form->input('id');?>	
+	<?=$this->Form->input('title', array('label' => 'Nome gruppo'));?>
+	
+	<div class="clear"></div>
+	
+	<?=$this->Form->input('summary', array('label' => 'Riassunto'));?>
+	
+	<? if(!empty($users)): ?>
+	
+	<div class="clear"></div>
+	
+	<h3>Utenti iscritti al gruppo</h3>
+	
+	<div class="user-list" style="height: 400px; width:615px; overflow: auto;">
+	
+		<table class="form_table" style="width: 600px;">
+		
+			<tr>
+				<th>Cognome</th>
+				<th>Nome</th>
+				<th>Email</th>
+			</tr>
+			
+			<? foreach($users as $user): $user = $user['NewsletterUser']; ?>
+			
+			<tr>
+				<td><?=$user['surname'];?></td>
+				<td><?=$user['name'];?></td>
+				<td><?=$user['email'];?></td>
+			</tr>
+			
+			<? endforeach; ?>
+		
+		</table>
+	
+	</div>
+	
+	<? endif; ?>
+		
+	<?=$this->Form->end();?>

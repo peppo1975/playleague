@@ -1,0 +1,521 @@
+/*
+	COLORS
+	violetto: #DDDFEC
+	blu: #1E2980
+	verde: #090
+	
+*/
+#CampionatiCampoSearch { width: 350px; }
+.girone_add { width: 100% !important; }
+body, p, form, ul, ol, h1, h2, h3, h4, h5, h6{ margin: 0; padding: 0;}
+body{ font-family: Arial, Verdana; font-size: 12px; background-color: #EEEEEE; color: #333;}
+
+p, ul, ol{ line-height: 1.4em;}
+ul, ol{ list-style: none;}
+a img{ border:none;}
+
+#container{ width: 100%; min-width:980px;}
+#header{margin: 0 20px 20px; background-color: #FFF; border: 1px solid #CCCCCC;
+-webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;}
+#body_page{margin:0 20px 10px; background:#FFF url(/img/retino_logo.gif) no-repeat right bottom; border: 1px solid #CCC;
+-webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;}
+
+.clear{ clear: both;}
+.left{ float: left;}
+.right{ float: right;}
+
+/*TOP ----------------------------------- */
+#top{height:30px; margin: 0 20px 10px; border: 1px solid #CCC; border-top: none; background-color: #FFF;
+    -webkit-border-bottom-left-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -moz-border-radius-bottomright: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;}
+#top ul{ padding: 5px 10px; }
+#top ul li{ display: inline; color: #000; }
+#top ul.left li{ display: block; float: left; padding:2px 20px 0 0; height: 28px;}
+#top ul.left li.select_mode{ padding-top: 0; height: 30px;}
+#top ul.right li{ display: block; float: left; padding:2px 0 0 20px; font-size: 13px; height: 28px;}
+#top ul li a{ text-decoration: none; color: #1E2980;}
+#top ul li a:hover{ color: #000;}
+#top ul li em{ color: #090;}
+
+/*BOTTOM ----------------------------------- */
+#bottom{height: 25px; margin: 0 20px;}
+#bottom ul{ padding: 0 10px; font-size: 11px;}
+#bottom ul li{ display: inline; color: #000; }
+#bottom ul.left li{ display: inline; padding-right: 20px;}
+#bottom ul.right li{ display: inline; padding-left: 20px;}
+#bottom ul li a{ text-decoration: none; color: #1E2980;}
+#bottom ul li a:hover{ color: #000;}
+
+/*HEADER ----------------------- */
+#header ul {height: 45px;}
+#header ul:after{ content: "."; visibility: hidden; height: 0; display: block; clear: both;}
+#header ul li{ display: block; float: left; position: relative;}
+#header ul li a{    color: #666;
+    display: block;
+    font-weight: bold;
+    padding: 15px 10px 0;
+    text-decoration: none;
+    border-right: 1px  solid #999999;
+    height: 30px;
+    }
+#header ul li:last-child a{ border-right: none;}
+#header ul li a:hover, #header ul li.hover_menu{ color: #000000; background-color: #EEE; text-shadow: 1px 1px 1px #FEFEFE;}
+#header ul li#selected a, #header ul li#selected ul.submenu{ background-color: #DDDFEC; color: #000000;}
+#header ul li#selected ul.submenu li a{ background-color: #FFF;}
+#header  ul li:first-child a{
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-bottom-left-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;}
+#header ul li.logo{ margin: 5px 10px 0;}
+#header ul li ul{ padding: 5px 0; display: none; background-color: #EEE; position: absolute; top:45px; left: -1px; width: 200px; border: 1px solid #999; border-top: 0; z-index: 10;  height: auto;
+    -webkit-border-bottom-left-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -moz-border-radius-bottomright: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    -moz-box-shadow: 2px 2px 2px #999;
+    -webkit-box-shadow: 2px 2px 2px #999;
+    box-shadow: 2px 2px 2px #999;
+}
+#header ul li:hover ul{ display: block;}
+#header ul li ul li{ float: none;}
+#header ul li:hover ul li a{
+	margin: 0 5px;
+	text-decoration: none; color: #999;  
+	border-bottom: 1px  dotted #CCC;
+    color: #999;
+    display: block;
+    padding: 6px 10px;
+    background:#FFF url(/img/timmyshare/icon_right_arrow_999.png) no-repeat 170px 7px;
+    border-right: none;
+    height: auto; 
+    font-weight: normal;
+    }
+#header ul li:hover ul li a:hover{ color: #222; background:#FFF url(/img/timmyshare/icon_right_arrow_222.png) no-repeat 170px 7px;}
+#header  ul li ul li:first-child a{    
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;}
+#header  ul li ul li:last-child a{ border-bottom: none;
+	-webkit-border-bottom-left-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -moz-border-radius-bottomright: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/*RIGHT COLUMN ------------------------------------------- */
+#contents{padding-bottom: 10px; width: 100%; position: relative;}
+
+/*BLOCK BOX*/
+div.block_box{width: 295px; margin: 10px 0 0 10px; float: left; padding-bottom: 10px;}
+div.block_box h1{ color: #333; font-size: 17px; background-color: #DDDFEC; padding: 3px 5px; margin-bottom: 10px; font-weight: normal;
+-webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;} 
+div.block_box img{ border: 1px solid #CCC; display: block; float: left; margin-left: 5px;}
+div.block_box_links{ margin-left: 20px; float: left; width: 160px;}
+
+div.block_box_links ul{ padding: 10px 0 0;}
+div.block_box_links ul li a{ 
+	text-decoration: none; color: #999;  
+	border-bottom: 1px  dotted #CCC;
+    color: #999;
+    display: block;
+    padding: 6px 0;
+    background:url(/img/timmyshare/icon_right_arrow_999.png) no-repeat right 7px;
+}
+div.block_box_links ul li a:hover{ color: #222; background:url(/img/timmyshare/icon_right_arrow_222.png) no-repeat right 7px;}
+div.block_box_links ul li:last-child a{ border-bottom: none;}
+
+/*
+
+div.stampe, div.calendari{ position:relative; top:-150px;}
+
+*/
+/*PAGE CONTENTS -------------------- */
+h1.page_title{ color: #FFF; font-size: 17px; background: #333 url(/img/timmyshare/icon_bottom_arrow_333333.png) no-repeat 5px 6px; padding: 3px 25px;  height: 21px;
+margin: 10px 0 5px 10px; font-weight: normal; float: left;  display: block;
+-webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;
+-moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px;
+}
+
+ul.view_function{ float: left; margin-left: 10px;}
+ul.view_function li{display: block; float: left;border: 1px solid #CCC; border-bottom: none; padding:5px 10px 10px; margin: 10px 0 0 0;
+	-webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;}
+
+ul.main_functions{margin-right: 10px; height: 1%; float: right; top: 0; right: 0;}
+ul.main_functions li{ display: block; float: left;}
+ul.main_functions:after{content: "."; visibility: hidden; display: block; clear: both; height: 0;}
+ul.main_functions li a{ display: block; border: 1px solid #CCC; border-bottom: none; padding:5px 20px 10px; margin: 10px 0 0 0; font-weight: bold;
+	background-color: #FFF; color: #666; text-decoration: none;
+	-webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;}
+ul.main_functions li a.add{color: #090; background: url(/img/timmyshare/icon_add.png) no-repeat 10px 5px; padding-left: 30px;}
+ul.main_functions li a:hover{border: 1px solid #CCC; color: #000;  border-bottom: none;}
+ul.main_functions li.selected a{ color: #000; background-color: #FFF; border: 1px solid #333; border-bottom: none;}
+ul.main_functions li a.search{background: url(/img/timmyshare/icon_search.png) no-repeat 10px 5px; padding-left: 30px;}
+ul.main_functions li a.filter{background: url(/img/timmyshare/icon_filter.png) no-repeat 10px 5px; padding-left: 30px;}
+ul.main_functions li a.export{background: url(/img/timmyshare/icon_export_xls.png) no-repeat 10px 5px; padding-left: 30px;}
+
+
+/*tab selector ----------------------------------- */
+ul.tab-selector{ border-bottom: 1px solid #333;}
+ul.tab-selector li{ display: block; float: left;}
+ul.tab-selector:after{content: "."; visibility: hidden; display: block; clear: both; height: 0;}
+ul.tab-selector li a{ display: block; border: 1px solid #CCC; border-bottom: none; padding:5px 20px 10px; margin: 10px 0 0 0; font-weight: bold;
+	background-color: #FFF; color: #666; text-decoration: none;
+	-webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;}
+ul.tab-selector li.selected a{ color: #FFF; background-color: #333; border: 1px solid #333; border-bottom: none;}
+
+ul.tab-menu{ float: right; margin-top: -25px; height: 1%;}
+ul.tab-menu:after{ content: "."; display: block; height: 0; clear: both; visibility: hidden;}
+
+div.scheda{margin: 0 10px; border: 2px solid #333;
+	-webkit-border-bottom-left-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -moz-border-radius-bottomright: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    -webkit-border-top-left-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    border-top-left-radius: 8px;}
+
+div.scheda form{ margin:5px 10px 10px;}
+div.form_header{ border-bottom: 1px dotted #CCC; margin-top: 10px;}
+/*
+div.form_functions{ float: right;}
+div.form_functions ul li{ display: block; float: left;}
+div.form_functions ul li a{ display: block; color: #000; text-decoration: none; background-color: #DDDFEC; padding: 3px 10px; margin-left: 1px;}
+div.form_functions ul li a:hover{ background-color: #333; color: #FFF;}
+div.form_functions ul li:first-child a{    
+	-webkit-border-bottom-left-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    border-bottom-left-radius: 8px;
+}
+div.form_functions ul li:last-child a{    
+-webkit-border-bottom-right-radius: 8px;
+-moz-border-radius-bottomright: 8px;
+border-bottom-right-radius: 8px;
+}
+*/
+div.form_data{max-height: 300px; overflow-y: scroll;}
+div.scheda form h2{ margin-bottom: 5px; float: left; max-width: 640px;}
+div.scheda form h2 span{ color:#090;}
+div.form_header ul{ float: right;}
+div.form_header ul li{ display: inline; margin-left: 10px;}
+div.form_header ul li a{ color: #1E2980;}
+div.form_header ul li a:hover{ text-decoration: none;}
+form:after{ content: "."; visibility: hidden; display: block; clear: both; height: 0;}
+div.input, form div.submit{ float: left; margin:5px 20px 0 0;}
+div.scadenza{ position:relative; left:75px;}  /*div scadenza*/
+div.squa-camp, form div.nome-atleta, form div.responsabile{ position:relative; left:53px;}  /*div squadra/campionato, nomeatleta, responsabile */
+div.note{position: relative; left: 60px;}
+div.box-annuario-atleti{ position:absolute; top:140px; left:22px;} 
+div.required label{ font-weight: bold;}
+div.required label:after{ content: "*";}
+fieldset{ border: none; min-width:70px;}
+fieldset:after{ content: "."; visibility: hidden; height: 0; display: block; clear: both;}
+fieldset input{ float: left;}
+input.big{ width: 390px;}
+input.dateSmall{ width: 120px !important;}
+input.small{ width: 70px !important;}
+fieldset label{ float: left; clear: right;}
+label{ display: block;}
+#GoalTable label{ display: inline;}
+textarea{ font-family: Arial, Verdana; font-size: 12px; border-top: 1px solid #999; border-left:  1px solid #999; border-right:  1px solid #CCC; border-bottom:  1px solid #CCC;
+ padding: 2px; width: 325px;}
+h3{border-bottom: 1px dotted #CCC; margin-top: 10px;}
+div.error input{ border: 2px solid #900;}
+/*form div.error label{ color: #900;}*/
+
+div.form-container {margin: 0 10px; border: 2px solid #333;
+	-webkit-border-bottom-left-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -moz-border-radius-bottomright: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    -webkit-border-top-left-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    border-top-left-radius: 8px;}
+
+div.form-container form{ margin:5px 10px 10px;}
+div.form-container p{ padding: 10px 10px 0;}
+
+div.post_summary{ width: 400px; float: left; margin:5px 20px 0 0;}
+div.post_content{ width: 400px; float: left; margin:5px 0 0 0;}
+
+
+/* QUICK SEARCH ----------------------------- */
+div.quick_search{padding: 3px 5px 3px 0; height: 21px;
+margin: 10px 0 0; font-weight: normal; float: left;  display: block; background: #333;
+-webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;
+-moz-border-radius-topleft: 0px; -moz-border-radius-bottomleft: 0px;
+}
+div.quick_search form div.text{ position: relative;}
+div.quick_search form div.text span.reset_quick_search{ position: absolute; display: block; 
+width: 13px; height: 14px; right: 5px; top:3px; cursor: pointer;
+background: url(/img/timmyshare/icon_reset_quick_search.png) no-repeat left center;
+}
+div.quick_search form div.text span.reset_quick_search:hover{background: url(/img/timmyshare/icon_reset_quick_search_hover.png) no-repeat left center;}
+div.quick_search form div.text input{ border: none; height: 20px; padding:0 25px 0 25px; width: 180px;
+-webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;
+background:#FFF url(/img/timmyshare/icon_quick_search_disabled.png) no-repeat 5px center;
+
+ }
+div.quick_search form div.text input:focus{background:#FFF url(/img/timmyshare/icon_quick_search_enabled.png) no-repeat 5px center;}
+/* ------------------------------------- */
+
+/*beside_quick_search --------------------------- */
+div.beside_quick_search{padding: 3px 0 3px 0; height: 21px;
+margin: 10px 0 0 10px; font-weight: normal; float: left;  display: block; background: #DDDFEC;
+-webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;
+}
+div.beside_quick_search ul{ padding: 0 0 0 10px;}
+div.beside_quick_search ul li{ margin-top: 2px; display: block; float: left; margin-right: 10px;}
+
+/* MESSAGE ----------------------------- */
+	div.message{ padding:0 10px 10px; color: #900;}
+	div.error-message{ padding: 5px 0; font-size: 11px; color: #F00;}
+	div.okmessage{ padding: 10px;}
+	div.okmessage h2{ color: #090; }
+	div.okmessage p{ padding: 5px 0 0;}
+/* ------------------------------------- */
+
+#UserLoginForm a, #UserRecoverForm a{ clear: both; display: block; text-decoration: none; background-color: #DDDFEC; padding: 3px 7px; color: #333; float: left; font-size: 11px; margin: 10px 0 0;
+-moz-border-radius: 8px;
+-webkit-border-radius: 8px;
+border-radius: 8px;}
+#UserLoginForm a:hover, #UserRecoverForm a:hover{ background-color: #666; color: #FFF;}
+
+/*TABLES ---------------------------- */
+table{ border-collapse: collapse;}
+table th{ text-align: left; padding:10px 5px; word-wrap: normal;}
+
+table th.first{
+	-webkit-border-top-left-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    border-top-left-radius: 8px;
+    width: 100px;
+}
+table th.last{
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topright: 8px;
+    border-top-right-radius: 8px;
+}
+table tr{ vertical-align: top; background-color: #FFF; }
+table tr.alterna{ background-color: #EFEFEF;}
+table tr td{padding:4px 5px 0; border-top: 1px solid #CCC; font-size: 11px; line-height: 1.0em;}
+table td.tools{ padding: 0px 5px; min-width: 120px;}
+table tr td ul{ line-height: 1.0em;}
+table tr td ul li input[type="checkbox"]{ width: 13px; height: 13px;}
+table tr td ul li img{ display: block; margin: 0; padding: 0; width: 15px; height: 15px;}
+table tr td.tools ul li{ display: block; padding-right: 5px; float: left;}
+table tr:hover{ background-color: #A7F993; color: #000;}
+table tr a{ color:#1E2980;}
+table tr a:hover{ text-decoration: none;}
+table span.order_type{ padding-right: 5px; cursor: pointer;}
+table th a{ color: #FFF; text-decoration: none;}
+table span.name_type{ padding-right: 5px; position: relative; top: -5px;}
+table span.delete-th-filter{ width: 13px; height: 14px; cursor: pointer; position:relative; top: -3px;}
+table th:after{ content: "."; visibility: hidden; height: 0; display: block; clear: both;}
+
+.form_table{margin: 10px 10px 0 0; width: 900px;}
+.form_table th{ background-color: #DDDFEC; color: #333;}
+.form_table a.anteprima{position: relative; display: block; width: 52px; height: 52px;}
+.form_table a.anteprima span{position: absolute; width: 16px; height: 16px; bottom: 5px; right: 5px;}
+.form_table a.anteprima img{ border: 1px solid #CCC;}
+.form_table a.anteprima span img{ border: none;}
+
+div.table_container{margin: 10px 10px 0;  overflow-x: scroll; border:1px solid #CCC;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+	-moz-box-shadow: 2px 2px 2px #999;
+    -webkit-box-shadow: 2px 2px 2px #999;
+    box-shadow: 2px 2px 2px #999;}
+.index_table{ width: 100%; }
+
+.index_table th{ background-color: #333; color: #FFF;}
+.index_table tr td{min-width: 130px;}
+.index_table td.tools{ padding:1px 5px 2px; min-width: 130px;}
+
+#index_table tr:hover { background-color: #A7F993 !important; color: #000 !important;}
+
+div.operations_bar{ background-color: #DDDFEC; margin: 10px 10px 0; padding: 5px 0;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+div.operations_files_bar{
+background-color: #DDDFEC; padding: 1px 0 3px; margin: 10px 0 0;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;}
+
+.cake-sql-log{ width: 100%}
+
+/*PAGING --------------------------------- */
+ul.paging{ height: 1%; margin-right: 10px;}
+ul.paging:after{content: "."; visibility: hidden; height: 0; display: block; clear: both;}
+ul.paging li{ display: block; float: left;}
+ul.paging li a{ display: block; margin:2px 0 0 1px; background:#FFF; height: 15px; padding:0 5px 1px; text-align: center; color: #333; font-size: 11px; text-decoration: none;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;}
+ul.paging li a:hover{ background: #666; color: #FFF;}
+ul.paging li.selected a{background: #000; color: #FFF;}
+
+/*TABLE OPERATIONS --------------------------------- */
+ul.table_operations{ height: 1%; margin-left: 10px;}
+ul.table_operations:after{content: "."; visibility: hidden; height: 0; display: block; clear: both;}
+ul.table_operations li{ display: block; float: left;  margin-right: 10px;  }
+ul.table_operations li a{ display: block; padding:0; font-size: 11px; color: #1E2980; height: 15px; margin-top: 2px;}
+ul.table_operations li a:hover{ text-decoration: none;}
+
+
+
+/*DATE PICKER (CALENDARIO)*/
+button.ui-datepicker-trigger { display: none; }
+
+/*SEARCH LABELS*/
+
+ul.searchData{
+background-color: #EEE; margin: 10px 10px 0; padding: 5px 0; height: 1%;
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+ul.searchData:after{ content: "."; visibility: hidden; clear: both; display: block; height: 0;}
+ul li.searchRow{ padding:0 10px; border-right: 1px dotted #666; display: block; float: left;}
+ul li.searchRow span, ul li.searchRow a{ display: block; float: left;}
+ul li.searchRow span.fieldName{ font-weight: bold;}
+ul li.searchRow span.fieldName b{ color: #060; font-style: italic; font-weight: normal;}
+ul li.searchRow span.fieldName:after{ content: ":";}
+ul li.searchRow span.fieldValue{ font-style: italic; margin-left: 3px;}
+ul li.searchRow a.fieldResetLink{ background: url(/img/timmyshare/icon_filter_delete.png) no-repeat left top; margin-left: 5px; width: 14px; height: 14px;}
+ul li.searchRow a.fieldResetLink:hover{background: url(/img/timmyshare/icon_filter_delete_hover.png) no-repeat left top;}
+ul li.searchRow a.fieldResetLink span.fieldReset{ display: none;}
+
+/* TOOLTIPS */
+	.timmytip{ background-color: #1A171A; font-size: 12px; color: #FFF; font-family: arial; padding:5px 10px; position: relative;
+			-moz-box-shadow: 0px 0px 1px #999; 
+			-webkit-box-shadow: 0px 0px 1px #999; 
+			box-shadow: 0px 0px 1px #999;
+			-moz-border-radius: 5px; -moz-border-radius-bottomleft: 0;
+			-webkit-border-radius:5px; -webkit-border-bottom-left-radius: 0; 
+			border-radius: 5px; border-bottom-left-radius: 0;}
+	.arrow_tooltip{ display: block; height: 10px; width: 10px; background: url(/img/timmyshare/icon_tooltip_arrow.png) no-repeat left top; position: absolute; bottom: -10px; left:0; z-index: 1000;}
+			
+#timmyloader {
+
+	position: absolute;
+	z-index: 1000;	
+	display: none;
+	width: 16px;
+	height: 16px;
+
+}
+
+.hidden { display: none; }
+
+div.tab-page { display: none; }
+div.tab-selected { display: block !important; }
+div.tab-overflow { overflow: auto; height: 500px; }
+div.type-content { display: none; }
+
+table.form_table_full { width: 100% !important; }
+
+div.input div.checkbox {
+
+	float: left;
+	padding-right: 5px;
+	padding-left: 5px;
+
+}
+/*CAMPIONATI FASI FINALI */
+.opt_gironi, .opt_gare{ display:none;}
+
+/* GESTIONE CLASSIFICHE*/
+.index_table tr td.td_pt, .index_table tr td.td_g, .index_table tr td.td_v, .index_table tr td.td_p, .index_table tr td.td_n, .index_table tr td.td_gc,.index_table tr td.td_vc, .index_table tr td.td_pc, .index_table tr td.td_nc, .index_table tr td.td_gf, .index_table tr td.td_vf, .index_table tr td.td_nf, .index_table tr td.td_gft, .index_table tr td.td_gs, .index_table tr td.td_gfc, .index_table tr td.td_gff, .index_table tr td.td_gsc, .index_table tr td.td_gsf{ min-width:50px;	}
+
+/* -- GESTIONE CAMPIONATI -- +13px(ico X) --*/
+.index_table tr td.td_manifestazione{ min-width:121px;}
+.index_table tr td.td_girone{ min-width:74px;}
+.index_table tr td.td_g_ta{ min-width:65px;}
+.index_table tr td.td_giorno{ min-width:75px;}
+.index_table tr td.td_data{ min-width:74px;}
+.index_table tr td.td_ora{ min-width:56px;}
+.index_table tr td.td_squadra_casa{ min-width:116px;}
+.index_table tr td.td_squadra_trasferta{ min-width:139px;}
+.index_table tr td.td_campo{ min-width:94px;}
+.index_table tr td.td_goal_casa{ min-width:43px;}
+.index_table tr td.td_goal_tras{ min-width:43px;}
+.index_table tr td.td_causale{ min-width:82px;}
+.index_table tr td.td_nome_gara{ min-width:98px;}
+.index_table tr td.td_arbitro{ min-width:53px;}
+.index_table tr td.td_delegato{ min-width:86px;}
+.index_table tr td.td_del_arb{ min-width:78px;}
+.index_table tr td.td_arbitro_2{ min-width:63px;}
+.index_table tr td.td_num_gara{ min-width:93px;}
+div.EspulsioneInizio input{ width: 70px;}
+div.EspulsioneFine input{ width: 70px;}
+ul.list-champ { width: 600px; background: #FFF; }
+ul.list-champ li { width: 300px; float: left; }
+ul.list-champ li label { display: inline; }
+
+/* -- TABELLA CAMPIONATI -- +13px(ico X) --*/
+.index_table tr td.td_nome{ min-width:121px;}
+.index_table tr td.td_anno_sportivo{ min-width:117px;}
+.index_table tr td.td_in_corso{ min-width:82px;}
+.index_table tr td.td_in_uso{ min-width:71px;}
+.index_table tr td.td_italiana{ min-width:41px;}
+.index_table tr td.td_campionato_precedente{ min-width:169px;}
+.index_table tr td.td_tariffa_arbitro{ min-width:113px;}
+.index_table tr td.td_tariffa_arbitro_2{ min-width:123px;}
+.index_table tr td.td_tariffa_delegato{ min-width:124px;}
+.index_table tr td.td_tariffa_delegato_a{ min-width:135px;}
+
+/* ANNUARIO ATLETI */
+.index_table tr td.td_tessera{ min-width:80px; width:80px;}
+.index_table tr td.td_data_vidimazione{ min-width:133px; width:133px;}
+.index_table tr td.td_atleta{ min-width:100px; width:100px;}
+.index_table tr td.td_responsabile{ min-width:113px; width:113px;}
+.index_table tr td.td_tipo_assicurazione{ min-width:143px; width:143px;}
+
+
+/* NOTIFICA VISIVA CERTIFICATO MEDICO SCADUTO */
+input.to-renew{
+    color: #F00 !important;
+}
+

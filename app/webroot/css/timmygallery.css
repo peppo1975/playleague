@@ -1,0 +1,127 @@
+/*
+	timmytag copyright 2010 All rights reserved, tutti i diritti sono riservati
+*/
+
+#timmy_overlay { 
+	margin: 0; padding: 0; 
+	top: 0; left: 0;  
+	width: 100%; height: 100%;
+	overflow: hidden; display: none; position: absolute; z-index: 80;
+	background-image: url(/img/timmybox/bg_overlay.png);
+	font-family: arial, Helvetica, "Trebuchet MS";
+ 
+}
+#timmy_container { 
+	left: 50%; top: 50%; padding: 5px;
+	position: absolute; z-index: 79;
+ 	box-shadow:0px 3px 3px #333; -moz-box-shadow:0px 3px 3px #333;
+	background-color: #FFF; text-align: center;
+	max-width: 980px;
+}
+
+#timmy_img { 
+	display: none; opacity: 1;
+}
+#timmy_overlay #timmy_loader { 
+	position: absolute; top: 50%; left: 50%; z-index: 97;
+	background-color: #EDE9DB;
+	padding: 10px;
+	-moz-border-radius:6px;
+	-webkit-border-radius: 6px;
+}
+#timmy_container #timmy_loader {
+	position: absolute; top: 50%; left: 50%; text-align: center; z-index: 97;
+	background-color: #FFF; /*background-color: #EDE9DB;*/
+	padding: 10px;
+	-moz-border-radius:6px;
+	-webkit-border-radius: 6px;
+	}
+#timmy_container div#timmy_loader img {display: inline;}
+.full_screen_drag{cursor: move;}
+
+/* Pulsanti di interazione ------------------------------------------- */
+#timmy_btn_sx{
+	width: 40px; height: 40px; 
+	background-color: #FFF;
+	-moz-border-radius-bottomright: 3px; -webkit-border-bottom-right-radius: 3px; border-radius-bottomright: 3px; 
+	-moz-border-radius-topright: 3px; -webkit-border-top-right-radius: 3px; border-radius-topright: 3px;
+}
+#timmy_btn_sx img { display: inline; padding-left: 2px;}
+
+#timmy_btn_dx {
+	width: 40px; height: 40px;
+  	background-color: #FFF; text-align: right;
+	-moz-border-radius-bottomleft: 3px; -webkit-border-bottom-left-radius: 3px; border-radius-bottomleft: 3px; 
+	-moz-border-radius-topleft: 3px;  -webkit-border-top-left-radius: 3px; border-radius-topleft: 3px;
+}
+#timmy_btn_dx img { display: inline; padding-right: 2px;}
+
+#timmy_close { text-align: center;}
+#timmy_close img { padding: 0px 0 0 0px;  display: block;}
+#timmy_close:hover { opacity: 1; }
+
+
+#timmy_change .button {
+	left: 50%;
+	cursor: pointer; 
+	display: none; position: absolute; z-index: 95;
+}
+
+#timmy_overlay .button_up {
+	width: 20px; height: 20px;
+	right: 10px; top: 3px;
+	cursor: pointer; display: none; position: absolute; z-index: 95; 
+   	background: url(../img/timmybox/bg_timmyclose.png) no-repeat;
+
+}
+/* --------------------------------------------------------------------- */
+
+#pgallery { min-width: 0;  }
+
+.tipo_weddings, .tipo_gallerie, .tipo_index { display: none; }
+
+#timmy_info {
+ position: absolute;
+ height: 22px;
+ top:0px; right: 0;
+ background-color: #FFF;  
+ -moz-border-radius-bottomleft: 3px;
+ -webkit-border-bottom-left-radius: 3px;
+ border-radius: 3px;
+ display: none;
+ text-align: center;
+}
+
+#timmy_container:hover #timmy_info { display: block;}
+#timmy_info p{ padding: 5px 20px 0 10px; color: #999; font-size: 11px; }
+#timmy_info p b{ font-weight: normal; color: #333;}
+
+#timmy_descr p{ font-size: 13px; padding:10px 5px; text-align: left;}
+#timmy_descr p span.file_title{ display: block; font-weight: bold; font-size: 12px; border-bottom: 1px dotted #CCC; margin-bottom: 5px;}
+#timmy_descr p span.file_title:first-letter{ text-transform: uppercase;}
+.fullscreen_overlay { background-color: #EDE9DB; background-image: none !important;}
+
+.fullscreen_overlay #timmy_img {
+
+	cursor: move;
+
+}
+
+.fullscreen_overlay #timmy_info {
+	position: absolute;
+	bottom: 0;
+	top: auto;
+	-moz-border-radius-topleft: 3px;
+	-webkit-border-top-left-radius: 3px;
+ 	-moz-border-radius-bottomleft: 0;
+ 	-webkit-border-bottom-left-radius: 0;
+}
+
+.fullscreen_overlay #timmy_close {
+
+	margin-right: 15px;
+	margin-top: 15px;
+
+}
+.timmy_description { display: none; }
+

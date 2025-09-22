@@ -1,0 +1,8 @@
+@font-face {
+ font-family: "Din";
+ src: url("/font/DIN.eot") /* EOT file for IE */
+}
+@font-face {
+ font-family: "Din";
+ src: url("/font/DIN.ttf") format('truetype'); /* TTF file for CSS3 browsers */
+}

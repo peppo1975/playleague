@@ -1,0 +1,48 @@
+/* TIMMMYBOX /////////////////////////////////////////// */
+	#timmy_overlay { 
+		position: absolute; top: 0px; left: 0px; width:100%; background: url(/img/timmybox/bg_overlay.png); z-index: 100; display: none;
+	}
+	#timmybox_container{ 
+		padding: 5px; min-width: 670px; position: absolute; background:#DDDFEC; 
+		-moz-border-radius: 5px; -webkit-border-radius: 5px; 
+		box-shadow:0px 3px 10px #333; -moz-box-shadow:0px 3px 10px #333;
+	}
+	#timmybox_container form{ 
+		background-color: #FFF; padding: 10px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+	 }
+	#timmybox_container form div.input{ margin-top: 10px;}
+	#timmybox_container form textarea{ width: 300px;}
+	#timmybox_container form div.text input{ width: 300px;}
+	
+	
+	
+	
+	#timmybox_container b{color:#0063A5}
+	#timmybox_container h2{ font-size: 16px; font-weight: normal;}	
+	#timmybox_container h2 span{color:#0063A5;  font-style: italic;}
+	div.timmydesc{ padding: 10px 0;}
+	#timmybox_container #prog_button{ margin:20px 0;}
+	
+	
+	#timmymedia{ padding-top: 10px;}
+	#timmyvideo{ width: 500px; float: left;}
+	#timmygallery{float: left; width: 100%;}
+	#timmygallery img{ float: left; margin:0 0 1px 1px;}
+	#timmygallery span.miniatura{ cursor: pointer;}
+
+	#timmy_overlay h3{color: #333; font-style: italic; padding-top: 10px;}
+	
+	/*BUTTONS -------------------------------- */
+	#timmy_overlay input.close{ position: absolute; width: 21px; height: 21px; border: none; right: -10px; top: -10px; background: url(/img/timmybox/timmybox_close_button.png) no-repeat left top;
+	cursor:pointer;}
+	#timmy_overlay input.close:hover{ background: url(/img/timmybox/timmybox_close_button_hover.png) no-repeat left top;}
+	
+	div.timmy_errors { background-color: #900; color: #FFF; padding: 5px; margin-top: 10px;
+		border-radius:5px; -moz-border-radius:5px; -webkit-border-radius: 5px;}
+	h2.timmy_errors {color: #900;}
+	
+	div.timmy_contents h2{ color: #0063A5; padding-bottom: 10px; font-style: italic;}
+	div.timmy_contents p{ padding-bottom: 20px; }
+	div.timmy_contents p b{ color: #000;}
+	
+	

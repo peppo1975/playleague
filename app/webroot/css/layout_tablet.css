@@ -1,0 +1,28 @@
+input { -webkit-appearance: none; }
+
+/************* MAIN CONTAINER ***************/
+#header, #container, #footer { zoom: 98%; -webkit-transform: translate3d(0,0,0); }
+
+.login-form,
+.signup-select{ 
+	background-image: none;
+	top: 35px; 
+	background: #FFF;
+	border: 1px solid #EEE; 
+	border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	-webkit-border-radius: 0 0 5px 5px;
+	-o-border-radius: 0 0 5px 5px;
+	box-shadow: 0 1px 10px 0 #666;
+	width: auto; 
+	height: auto;
+	right: 0; 
+	left: auto;
+	padding: 10px 8px 10px 10px;
+	}
+	
+.login-form form,
+.signup-select .signup-container{ 
+	margin: 0;
+	padding: 0; 
+	}

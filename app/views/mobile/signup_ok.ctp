@@ -1,0 +1,1 @@
+La registrazione è andata a buon fine. A breve riceverai un email con i dati di accesso e il link di conferma.

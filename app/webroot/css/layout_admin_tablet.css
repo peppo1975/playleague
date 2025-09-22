@@ -1,0 +1,47 @@
+/****** Big tablet input ************/
+input.big-tablet { width: 300px; }
+
+/******* Header: User info li ******/
+#container #top ul.right li { font-size: 11px; }
+
+/******* Table: title ********/
+h1.page_title { width: 132px; white-space: nowrap; font-size: 14px; text-overflow: ellipsis;  overflow: hidden; display: block; }
+
+/******* Table: img, input ******/
+table tr td ul li img { width: 20px; height: 20px; }
+table tr td ul li input[type="checkbox"] { width: 18px; height: 18px; }
+
+/******* Table: Quick search input ******/
+div.quick_search form div.text input { width: 100px; }
+
+/******* Anagrafica *********/
+#SendMailSmsAdminSendMailSmsForm div.input { min-width: 200px; }
+#AthleteSearchForm div.input { min-width: 100px; }
+
+/******* Annuario ********/
+#YearbookSearchForm div.responsabile-tablet fieldset { padding-left: 0px; margin-right: 0px; }
+
+#table_append { width: 100%; max-width: 960px!important; }
+#table_append td { max-width: 30px; word-wrap: break-word; }
+
+.index_matches td.tools { min-width: 90px !important; }
+
+.radio fieldset {
+	min-width: 90px;
+}
+
+#GoalTable tr td input.goal-input, #GoalTable tr td input.autogoal-input { width: 30px; }
+
+ul.tab-selector li { width: 110px; text-align: center; }
+ul.tab-selector li a { font-size: 12px; padding: 5px 5px 10px; }
+
+.jqm { 
+
+	background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 25px 25px 25px 25px;
+    box-shadow: 3px 3px 3px #444444;
+    margin-top: -150px;
+    position: absolute;
+    z-index: 99999;
+
+}

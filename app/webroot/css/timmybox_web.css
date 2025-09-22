@@ -1,0 +1,118 @@
+/*
+	timmytag copyright 2011 All rights reserved, tutti i diritti sono riservati 
+	/**************ANTONIO*******/
+*/
+
+#timmy_overlay { 
+	margin: 0; padding: 0; 
+	top: 0; left: 0;  
+	width: 100%; height: 100%;
+	overflow: hidden; display: none; position: absolute; z-index: 80;
+	background-image: url(/img/timmybox/bg_overlay.png);
+	font-family: arial, Helvetica, "Trebuchet MS";
+ 
+}
+#timmy_container { 
+ 	padding: 5px;
+	position: absolute; z-index: 79;
+ 	box-shadow:0px 10px 10px #333; -moz-box-shadow:0px 10px 10px #333; -webkit-box-shadow:0px 10px 10px #333;
+	background-color: #FFFFFF; text-align: center;
+	border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px;
+}
+
+#timmy_img { 
+	display: none; opacity: 1;
+}
+#timmy_overlay #timmy_loader { 
+	position: absolute; top: 50%; left: 50%; z-index: 200;
+	background-color: #EDE9DB;
+	margin-top: -8px;
+	margin-left: -8px;
+	padding: 10px;
+	-moz-border-radius:6px;
+	-webkit-border-radius: 6px;
+}
+#timmy_container #timmy_loader {
+	position: absolute; top: 50%; left: 50%; text-align: center; z-index: 200;
+	background-color: #FFF; /*background-color: #EDE9DB;*/
+	padding: 10px;
+	-moz-border-radius:6px;
+	-webkit-border-radius: 6px;
+	}
+#timmy_container div#timmy_loader img {display: inline;}
+.full_screen_drag{cursor: move;}
+
+/* Pulsanti di interazione ------------------------------------------- */
+#timmy_btn_sx{
+	width: 40px; height: 40px; 
+	background-color: #FFF;
+	-moz-border-radius-bottomright: 3px; -webkit-border-bottom-right-radius: 3px; border-radius-bottomright: 3px; 
+	-moz-border-radius-topright: 3px; -webkit-border-top-right-radius: 3px; border-radius-topright: 3px;
+}
+#timmy_btn_sx img { display: inline; padding-left: 2px;}
+
+#timmy_btn_dx {
+	width: 40px; height: 40px;
+  	background-color: #FFF; text-align: right;
+	-moz-border-radius-bottomleft: 3px; -webkit-border-bottom-left-radius: 3px; border-radius-bottomleft: 3px; 
+	-moz-border-radius-topleft: 3px;  -webkit-border-top-left-radius: 3px; border-radius-topleft: 3px;
+}
+#timmy_btn_dx img { display: inline; padding-right: 2px;}
+
+#timmy_close { text-align: center; display: none; }
+
+#timmy_change .button {
+	left: 50%;
+	cursor: pointer; 
+	display: none; position: absolute; z-index: 95;
+}
+
+#timmy_overlay .button_up {
+	width: 20px; height: 20px;
+	right: 10px; top: 10px;
+	cursor: pointer; position: absolute; z-index: 95; 
+}
+
+
+
+/* TIMMMYBOX vecchie /////////////////////////////////////////// */
+	#timmy_overlay { 
+		position: absolute; top: 0px; left: 0px; width:100%; background: url(/img/timmybox/bg_overlay.png); z-index: 100; display: none;
+	}
+	#timmy_container{ padding-bottom: 5px;}
+	#timmy_container h1{ padding: 10px 20px 0; font-size: 22px; color: #C6CCF3;}
+	#timmy_container h2{ padding: 0 20px 0; font-size: 18px; color: #666;}
+	#timmy_container p{ padding: 3px 20px 0;}
+	#timmy_container ul{ list-style: circle; list-style-position: inside; padding: 5px 20px 0;}
+	#timmy_container ul li{ padding-top: 5px;}
+	#timmy_container ol{ list-style: decimal; list-style-position: inside; padding: 5px 20px 0;}
+	#timmy_container ol li{ padding-top: 5px;}
+	
+
+/*TIMMYBOX CONTAINER ----------------------- */
+#timmybox_container{
+	padding: 5px;
+	position: absolute; z-index: 79;
+ 	box-shadow:0px 10px 10px #333; -moz-box-shadow:0px 10px 10px #333; -webkit-box-shadow:0px 10px 10px #333;
+	background-color: #FFFFFF; text-align: left;
+	border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px;
+	max-width: 880px;}
+
+#timmybox_container h1{font-size: 22px; color: #C6CCF3; padding: 10px 20px 0 10px;}
+#timmybox_container h1 span{ color: #333;}
+
+.timmy_description { display: none; }
+
+#timmy_info {
+ position: absolute;
+ height: 22px;
+ top:3px; left: 3px;
+ background-color: #FFF;  
+ -moz-border-radius-bottomright: 3px;
+ -webkit-border-bottom-right-radius: 3px;
+ border-bottom-right-radius: 3px;
+ display: none;
+ padding-top: 2px;
+}
+#timmy_info p{ padding: 2px 8px 0 5px;}
+#timmy_descr p{ font-size: 13px; padding:10px 5px; text-align: left;}
