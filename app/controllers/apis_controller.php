@@ -1259,11 +1259,11 @@ class ApisController extends AppController
     public function getConnectBAS()
     {
 
-        $res['url'] = "https://www.hellogest.com";
-        $res['client_secret'] = "0gqViuxEraQxUDPwlWlrLhoftJEK4d0XvX7iMGGd";
+        // $res['url'] = "https://www.hellogest.com";
+        // $res['client_secret'] = "0gqViuxEraQxUDPwlWlrLhoftJEK4d0XvX7iMGGd";
 
-        // $res['url'] = "https://hellogestuat.herokuapp.com";
-        // $res['client_secret'] = "8Tx57YyG9HRkpFAo4k2kVz0EfYQI0YHNy9quChFf";
+        $res['url'] = "https://hellogestuat.herokuapp.com";
+        $res['client_secret'] = "8Tx57YyG9HRkpFAo4k2kVz0EfYQI0YHNy9quChFf";
 
         $res['client_id'] = "4";
 
@@ -1457,8 +1457,24 @@ class ApisController extends AppController
         // echo $json;
         $atleta = $post['atleta'];
         $squadra = $post['squadra'];
+
+        $api = new Api();
+
+        // GIUSEPPE 2025-09-23 ---------------------------------------------------------
+        // controllo che l'assicurazione abbia id 1 o 11
+        $assic = $api->cercaAssicurazione($atleta, $squadra);
+
+        if ($assic["invia"] == false) {
+            $post['errore_assicurazione'] = true;
+            echo json_encode($post);
+            exit();
+        }
+        // -----------------------------------------------------------------------------
+
+
         $query = "SELECT * FROM AtletiBAS WHERE Atleta = '{$atleta}' AND Squadra = '{$squadra}'";
         $res = $this->key_select($this->select_sql($query), 'AnnoSportivo');
+
 
         if (count($res) > 1) {
             $this->renewAtletaBas($post, $res);
@@ -1466,15 +1482,13 @@ class ApisController extends AppController
         }
 
         if ($post['card_id'] == 0 && $post['subscriber_id'] > 0) {
-           // $this->write_file("")
+            // $this->write_file("")
             $this->renewAtletaBas($post, $res);
             exit();
         }
 
         // - - - - - - - - - - - - - - - - - -
 
-
-        $api = new Api();
 
         $client_id = $post['client_id'];
         $serverSendData = $this->getConnectBAS()['url'] . "/api/client/{$client_id}/subscriber";
@@ -1486,7 +1500,11 @@ class ApisController extends AppController
         $atleta_bas['lastname'] = $post['cognome'];
         $atleta_bas['birthplace'] = $post['city'];
         $atleta_bas['gender'] = $post['sesso'];
-        $atleta_bas['insurance'] = "BASFIA1";
+
+        // $atleta_bas['insurance'] = "BASFIA1";
+        $atleta_bas['insurance'] = $assic["insurance"]; // GIUSEPPE 2025-09-23 ---------------------------------------------------------
+        $this->logBas($atleta_bas); // GIUSEPPE 2025-09-23 ---------------------------------------------------------
+
 
         $data_string = json_encode($atleta_bas);
 
@@ -1532,6 +1550,7 @@ class ApisController extends AppController
     }
 
 
+
     public function renewAtletaBas($post, $res)
     {
 
@@ -1542,7 +1561,26 @@ class ApisController extends AppController
         $subscriber_id = "";
         $atleta_bas = [];
 
-        
+
+
+
+
+        // GIUSEPPE 2025-09-23 ---------------------------------------------------------
+        // controllo che l'assicurazione abbia id 1 o 11
+
+        $atleta = $post['atleta'];
+        $squadra = $post['squadra'];
+
+        $assic = $api->cercaAssicurazione($atleta, $squadra);
+
+        if ($assic["invia"] == false) {
+            $post['errore_assicurazione'] = true;
+            echo json_encode($post);
+            exit();
+        }
+        // -----------------------------------------------------------------------------
+
+
 
         $anno = $api->annoSportivo()['current']['year'];
 
@@ -1552,13 +1590,15 @@ class ApisController extends AppController
 
         $last_year = max(array_keys($res));
 
+
+
         //echo json_encode([$res, $post, $last_year, $idAtletaBasRenew]);
 
         $client_id = $post['client_id'];
         $subscriber_id = $res[$last_year]['subscriber_id'];
 
         if ($post['subscriber_id'] > 0 && $post['card_id'] == 0) { // se il subscriber_id > 0 e card_id == 0 bisogna ripetere con un rinnovo // bug di hellogest
-            $subscriber_id = $post['subscriber_id']; 
+            $subscriber_id = $post['subscriber_id'];
         }
 
         $atleta_bas['birthday'] = $post['data_nascita'];
@@ -1566,7 +1606,10 @@ class ApisController extends AppController
         $atleta_bas['lastname'] = $post['cognome']; //"Rebechi";
         $atleta_bas['birthplace'] = $post['city']; //"2889";
         $atleta_bas['gender'] = $post['sesso']; //"m";
-        $atleta_bas['insurance'] = "BASFIA1";
+        // $atleta_bas['insurance'] = "BASFIA1";
+        $atleta_bas['insurance'] = $assic["insurance"]; // GIUSEPPE 2025-09-23 ---------------------------------------------------------
+
+        $this->logBas($atleta_bas); // GIUSEPPE 2025-09-23 ---------------------------------------------------------
 
         $serverSendData = $this->getConnectBAS()['url'] . "/api/client/{$client_id}/subscriber/{$subscriber_id}/renew";
         //$this->write_file('link', $serverSendData);
@@ -1642,6 +1685,25 @@ class ApisController extends AppController
 
         exit();
     }
+
+    // GIUSEPPE 2025-09-23 ---------------------------------------------------------
+    // public function logBas()
+    private function logBas($atleta_bas)
+    {
+
+        // $json = file_get_contents('php://input');
+        // $atleta_bas = json_decode($json, true);
+
+        $dir = "../webroot/_content/log_bas";
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+
+        $file = date("Y-m-d");
+        file_put_contents("{$dir}/{$file}", print_r($atleta_bas, true), FILE_APPEND | LOCK_EX);
+    }
+    // -----------------------------------------------------------------------------
+
 
     /*
 

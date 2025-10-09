@@ -250,6 +250,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         var li = document.getElementById(`${squadra}-${atleta}`);
         var message = document.getElementById(`message-${squadra}-${atleta}`);
 
+        // GIUSEPPE 2025-09-23 ---------------------------------------------------------
+        if(typeof res.errore_assicurazione !== 'undefined')
+        {
+            li.style.backgroundColor = 'orange';
+            message.innerHTML = `- ASSICURAZIONE NON VALIDA`;
+            return;
+        }
+        // -----------------------------------------------------------------------------
 
         if ((typeof res.response == 'undefined') || (res.response == null)) {
             li.style.backgroundColor = 'orange';

@@ -3149,6 +3149,63 @@ class Api extends AppModel
     }
 
 
+
+    // GIUSEPPE 2025-09-23 ---------------------------------------------------------
+    // controllo che l'assicurazione abbia id 1 o 11
+    public function cercaAssicurazione($atleta,$squadra)
+    {
+        $res = [
+                    "assicurazione" => 0, 
+                    "invia" => false, 
+                    "insurance"=>""
+                ];
+        
+        $anno_sportivo_tot = $this->annoSportivo();
+
+        $anno_sportivo = $anno_sportivo_tot["current"]["year"];
+
+        $query = "      SELECT
+                            Annuario.TipoAssicurazione
+                        FROM
+                            `Annuario`
+                        INNER JOIN SquadreCampionati ON SquadreCampionati.SquadraCampionato = Annuario.SquadraCampionato
+                        INNER JOIN Campionati ON Campionati.Campionato = SquadreCampionati.Campionato
+                        WHERE
+                            Campionati.AnnoSportivo = '{$anno_sportivo}' AND Annuario.Atleta = {$atleta} AND SquadreCampionati.Squadra = '{$squadra}'
+                        GROUP BY
+                            Annuario.TipoAssicurazione
+                        ORDER BY
+                            Annuario.`Annuario`
+                        DESC";
+
+     
+
+        $res_query = $this->db->select_sql($query);
+
+        if(count($res_query) > 0)
+        {
+            $assicurazione = $res_query[0]['TipoAssicurazione'];
+
+            $res["assicurazione"] = $assicurazione;
+
+            if($assicurazione == 1 )
+            {
+                $res["insurance"] = "BASFIA2";
+                $res["invia"] = true;
+            }
+
+            if($assicurazione == 11)
+            {
+                $res["insurance"] = "BASFIA1";
+                $res["invia"] = true;
+            }
+        }
+
+        return $res;
+    }
+    // -----------------------------------------------------------------------------
+
+
     protected function _calcolaCognome($string)
     {
         $cognome = $this->_sanitize($string);
