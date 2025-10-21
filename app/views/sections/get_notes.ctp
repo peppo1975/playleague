@@ -264,7 +264,7 @@
       $fpdf->Cell($l_5, 5, mb_strimwidth(ucwords(strtolower($citta)), 0, 17, ""), 1);
       $fpdf->Cell($l_6, 5, isset($partecipante['Athlete']['Sesso'][0]) ? $partecipante['Athlete']['Sesso'][0] : '', 1, 'C');
       $fpdf->Cell($l_7, 5, "", 1);
-      $fpdf->Cell($l_9, 5, $simbolo, 1, 0, 'C');
+	  $fpdf->Cell($l_9, 5, substr($simbolo, 0, 2), 1, 0, 'C');
       $fpdf->Cell($l_8, 5, "", 1);
       $fpdf->Ln();
     }

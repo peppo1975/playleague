@@ -84,7 +84,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <? $for_squadra = []; ?>
     <? foreach ($res as $squadra => $atleta_squadra): ?>
 
-        <h4><?= $atleta_squadra['nome'] ?> / <i>client_id: <?= $atleta_squadra['client_id'] ?></i></h4>
+        <!-- <h4><?= $atleta_squadra['nome'] ?> / <i>client_id: <?= $atleta_squadra['client_id'] ?></i></h4> -->
+        <h4 id="client_<?= $atleta_squadra['client_id'] ?>" name="nome_squadra" text="<?= $atleta_squadra['nome'] ?>" style="cursor: pointer;"><?= $atleta_squadra['nome'] ?> / <i>client_id: <?= $atleta_squadra['client_id'] ?></i> / <i>general_counsel_id: <?= $atleta_squadra['general_counsel_id'] ?></i></h4><!-- //GIUSEPPE 2025-10-13 -->
+
+        <!-- //GIUSEPPE 2025-10-13 -->
+        <h4 name="nome_presidente" text=<?= $atleta_squadra['presidente']['general_counsel_firstname'] ?>><?= sprintf(
+                                                                                                                "PRESIDENTE: %s %s / id Playleague: %s",
+                                                                                                                $atleta_squadra['presidente']['general_counsel_firstname'],
+                                                                                                                $atleta_squadra['presidente']['general_counsel_lastname'],
+                                                                                                                $atleta_squadra['presidente']['Atleta'] == "" ? "<a style='background-color:red; color:white'><i>&nbsp; CF Atleta e CF Presidente non coincidono &nbsp;</i></a>" : $atleta_squadra['presidente']['Atleta']
+                                                                                                            ) ?></h4>
+        <!-- --------------------- -->
 
         <? if ($atleta_squadra['client_id'] > 0): ?>
             <button class="button-tessera"
@@ -155,6 +165,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 </body>
 
 </html>
+
+<script src="/js/script_my.js" type="text/javascript"></script>
 <script>
     var index_invio = 0;
     var array_id_atleti = [];
@@ -178,11 +190,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     scorriClasseAtleta(squadra, client_id);
                 });
             });
+
+
+
+            //GIUSEPPE 2025-10-13 
+            vaiAllaPaginaSquadre();
+            vaiAllaPaginaAtleti()
+            scrorriPagina();
+            // ------------------
+
+
+
+            // let centerX = document.documentElement.clientWidth / 2;
+            // let centerY = document.documentElement.clientHeight / 2;
+
+            // let elem = document.elementFromPoint(centerX, 3000);
+            // elem.style.background = "red";
+
         }, 1000);
 
 
     });
-
 
 
 
@@ -251,8 +279,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         var message = document.getElementById(`message-${squadra}-${atleta}`);
 
         // GIUSEPPE 2025-09-23 ---------------------------------------------------------
-        if(typeof res.errore_assicurazione !== 'undefined')
-        {
+        if (typeof res.errore_assicurazione !== 'undefined') {
             li.style.backgroundColor = 'orange';
             message.innerHTML = `- ASSICURAZIONE NON VALIDA`;
             return;
@@ -298,16 +325,50 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
 
 
-        // if (index_invio == array_id_atleti.length - 1) {
-        //     return 0;
-        // }
-
-
-        // index_invio++;
-        // send(link);
-
 
     }
+
+    //GIUSEPPE 2025-10-13 
+    function vaiAllaPaginaSquadre() {
+        var nome_squadra = document.getElementsByName('nome_squadra');
+        Object.keys(nome_squadra).forEach((i) => {
+            nome_squadra[i].addEventListener('click', async (e) => {
+                console.log(e.srcElement.getAttribute("text"));
+                result = await httpPostNoJsonResponse('/admin/squadres/index', {
+                    quickSearch: e.srcElement.getAttribute("text")
+                });
+                window.open('/admin/squadres/index', '_blank');
+            });
+        });
+    }
+
+    function vaiAllaPaginaAtleti() {
+        var nome_presidente = document.getElementsByName('nome_presidente');
+        Object.keys(nome_presidente).forEach((i) => {
+            nome_presidente[i].addEventListener('click', async (e) => {
+                console.log(e.srcElement.getAttribute("text"));
+                result = await httpPostNoJsonResponse('/admin/athletes/index', {
+                    quickSearch: e.srcElement.getAttribute("text")
+                });
+                window.open('/admin/athletes/index', '_blank');
+            });
+        });
+    }
+
+
+
+
+    function scrorriPagina() {
+        let client_id = '<?= $client_id ?>';
+
+        if (client_id != '') {
+            const but = document.getElementById("client_" + client_id).getBoundingClientRect();
+            let y = but.top;
+            window.scrollBy(0, y);
+        }
+
+    }
+    // ------------------ 
 </script>
 <script>
     function httpPost(link, to_send) {

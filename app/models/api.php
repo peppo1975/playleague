@@ -205,15 +205,13 @@ class Api extends AppModel
 
     public function isApiKey()
     {
-        if (!isset($_GET['api_key']))
-        {
+        if (!isset($_GET['api_key'])) {
             exit();
         }
 
         $api_key = $_GET['api_key'];
 
-        if ($api_key != $this->api_key)
-        {
+        if ($api_key != $this->api_key) {
             exit();
         }
     }
@@ -237,8 +235,7 @@ class Api extends AppModel
         $grop_id = $_SESSION['User']['group_id'];
         //-------------------------------------------------
 
-        foreach ($sport as $key => $value)
-        {
+        foreach ($sport as $key => $value) {
             if ($value == 0)
                 continue;
 
@@ -250,8 +247,7 @@ class Api extends AppModel
         $our_init = $date['our-init'];
         $our_end = $date['our-end'];
 
-        if (count($filter_campi))
-        {
+        if (count($filter_campi)) {
             $implode_campi = implode(", ", $filter_campi);
             $array_filter_campi = "Campi.Campo IN({$implode_campi})  AND ";
         }
@@ -276,8 +272,7 @@ class Api extends AppModel
             
             ";
 
-        if ($grop_id == 15)
-        {
+        if ($grop_id == 15) {
             $query = "
             
             SELECT 
@@ -313,8 +308,7 @@ class Api extends AppModel
 
         $arrStruct = [];
 
-        foreach ($res as $id => $value)
-        {
+        foreach ($res as $id => $value) {
 
             $arrStruct[$value['Campo']]['Descrizione'] = $value['Descrizione'];
             $arrStruct[$value['Campo']]['is5'] = $value['is5'];
@@ -323,8 +317,7 @@ class Api extends AppModel
             //            $arrStruct[$value['Campo']]['GiorniDate'] = $giorni_date;
         }
 
-        foreach ($res as $id => $value)
-        {
+        foreach ($res as $id => $value) {
             $arrStruct[$value['Campo']]['Giorni'][$value['Giorno']][$value['Ora']]['stato'] = "L";
             $arrStruct[$value['Campo']]['Giorni'][$value['Giorno']][$value['Ora']]['text'] = "libero";
             $arrStruct[$value['Campo']]['Giorni'][$value['Giorno']][$value['Ora']]['values'] = "";
@@ -410,8 +403,7 @@ class Api extends AppModel
     private function strutturaPrenotazioni(&$elenco_prenotazioni)
     {
         $res = [];
-        foreach ($elenco_prenotazioni as $value)
-        {
+        foreach ($elenco_prenotazioni as $value) {
             $campo = $value['Campo'];
             $data = $value['Data'];
             $ora = $value['Ora'];
@@ -430,8 +422,7 @@ class Api extends AppModel
         $res = [];
         $final = [];
 
-        foreach ($elenco_prenotazioni as $value)
-        {
+        foreach ($elenco_prenotazioni as $value) {
             $calendario = $value['Calendario'];
             $res[$calendario] = true;
         }
@@ -458,15 +449,13 @@ class Api extends AppModel
 
         $elenco = $this->db->select_sql($query);
 
-        foreach ($elenco as $value)
-        {
+        foreach ($elenco as $value) {
             $calendario = $value['Calendario'];
             $squadra = $value['SquadraCampionato'];
             $final[$calendario][$squadra] = $value['Denominazione'];
         }
 
-        foreach ($elenco_prenotazioni as $key => $value)
-        {
+        foreach ($elenco_prenotazioni as $key => $value) {
             $calendario = $value['Calendario'];
             $elenco_prenotazioni[$key]['Squadre'] = $final[$calendario];
         }
@@ -488,13 +477,10 @@ class Api extends AppModel
         $privati = $prenotazioni['Privati'];
 
         // merge campionati ---------------------------------------------
-        foreach ($campionati as $id_campo => $value_campo)
-        {
+        foreach ($campionati as $id_campo => $value_campo) {
 
-            foreach ($value_campo as $giorno_settimana => $orari)
-            {
-                foreach ($orari['Ora'] as $ora => $info_ora)
-                {
+            foreach ($value_campo as $giorno_settimana => $orari) {
+                foreach ($orari['Ora'] as $ora => $info_ora) {
                     $ora = str_replace(".", ":", $ora);
 
                     $campi[$id_campo]['Giorni'][$giorno_settimana][$ora . ":00"]['stato'] = "C";
@@ -507,13 +493,10 @@ class Api extends AppModel
 
 
         // merge privati ---------------------------------------------
-        foreach ($privati as $id_campo => $value_campo)
-        {
+        foreach ($privati as $id_campo => $value_campo) {
 
-            foreach ($value_campo as $giorno_settimana => $orari)
-            {
-                foreach ($orari['Ora'] as $ora => $info_ora)
-                {
+            foreach ($value_campo as $giorno_settimana => $orari) {
+                foreach ($orari['Ora'] as $ora => $info_ora) {
                     $campi[$id_campo]['Giorni'][$giorno_settimana][$ora]['stato'] = "P";
                     //                    $campi[$id_campo]['Giorni'][$giorno_settimana][$ora]['text'] = sprintf("Privato:<br>&nbsp;%s %s<br>&nbsp;(%s)", $info_ora['bookerNome'], $info_ora['bookerCognome'], $info_ora['bookerEmail']);
                     $campi[$id_campo]['Giorni'][$giorno_settimana][$ora]['text'] = "Privato:";
@@ -542,13 +525,10 @@ class Api extends AppModel
         $exit = false;
 
         $len = sizeof($arrStruct);
-        do
-        {
+        do {
             $exit = true;
-            for ($i = 0; $i < $len - 1; $i++)
-            {
-                if ($arrStruct[$i] > $arrStruct[$i + 1])
-                {
+            for ($i = 0; $i < $len - 1; $i++) {
+                if ($arrStruct[$i] > $arrStruct[$i + 1]) {
                     $exit = false;
                     $temp = $arrStruct[$i];
                     $arrStruct[$i] = $arrStruct[$i + 1];
@@ -586,8 +566,7 @@ class Api extends AppModel
 
         $res = "";
 
-        switch ($gd['wday'])
-        {
+        switch ($gd['wday']) {
             case 0:
                 $res = $gd['wday'] + 7;
                 break;
@@ -612,8 +591,7 @@ class Api extends AppModel
 
         $data = new DateTime();
 
-        for ($i = 1; $i <= 7; $i++)
-        {
+        for ($i = 1; $i <= 7; $i++) {
             $data->setISODate($anno, $Sett, $i);
             $res['regular'][$i] = $data->format('d/m/Y');
             $res['timestamp'][$i] = $data->format('Y-m-d');
@@ -636,8 +614,7 @@ class Api extends AppModel
 
         $res = [];
 
-        switch ($cangheState)
-        {
+        switch ($cangheState) {
             case "L":
 
                 $toBooking["risposta"] = "da cancellare";
@@ -658,8 +635,7 @@ class Api extends AppModel
 
                 //$toBooking["result"] = $result;
 
-                if ($result['NumBooker'] == 0)
-                {
+                if ($result['NumBooker'] == 0) {
 
                     /*
                       bookerCognome: "sdfsdf"
@@ -681,8 +657,7 @@ class Api extends AppModel
                     //                    
                     // poi select e prendo l'id
                 }
-                if ($result['NumBooker'] == 1)
-                {
+                if ($result['NumBooker'] == 1) {
                     // prendo l'id
 
                     $toBooking['Booker'] = $result['Booker'];
@@ -695,8 +670,7 @@ class Api extends AppModel
                 $prenotazione = uniqid() . rand(1000, 9999) . rand(1000, 9999);
                 $toBooking['Prenotazione'] = $prenotazione;
 
-                foreach ($_POST['Data'] as $date)
-                {
+                foreach ($_POST['Data'] as $date) {
                     $toBooking['Data'] = $date;
                     $this->db->insert_into("CampiBooking", $toBooking);
                 }
@@ -718,8 +692,7 @@ class Api extends AppModel
         unset($_POST['id_booking']);
 
         $f = [];
-        foreach ($_POST as $key => $value)
-        {
+        foreach ($_POST as $key => $value) {
             $f[] = "`{$key}` = '{$value}'";
         }
 
@@ -798,8 +771,7 @@ class Api extends AppModel
 
         // per evitare di inserire due volte una mail , ho creatouna chiave unica per email
 
-        foreach ($booker_all as $booker)
-        {
+        foreach ($booker_all as $booker) {
             $values['email'] = trim($booker['bookerEmail']);
             $values['nome'] = trim($booker['bookerNome']);
             $values['cognome'] = trim($booker['bookerCognome']);
@@ -835,8 +807,7 @@ class Api extends AppModel
 
         $array_filter = [];
         $filter = "";
-        foreach ($sport as $key => $value)
-        {
+        foreach ($sport as $key => $value) {
             if ($value == 0)
                 continue;
 
@@ -870,8 +841,7 @@ class Api extends AppModel
             ORDER BY Campi.Descrizione ASC
             ";
 
-        if ($grop_id == 15)
-        {
+        if ($grop_id == 15) {
             $query = "
             
                 SELECT 
@@ -914,10 +884,8 @@ class Api extends AppModel
         $array_for_filter = [];
         $array_for_search_duplicate = [];
 
-        foreach ($bookers as $booker)
-        {
-            if ($booker['email'] != "")
-            {
+        foreach ($bookers as $booker) {
+            if ($booker['email'] != "") {
                 $array_for_filter[] = "'" . $booker['email'] . "'"; // serve per cercare nella tabella `newsletters_users`
                 $array_for_search_duplicate[$booker['email']] = true; // serve per confrontare
             }
@@ -935,8 +903,7 @@ class Api extends AppModel
         $inserted_list = $this->db->select_sql("SELECT TRIM(LOWER(email)) as email FROM `newsletters_users` WHERE TRIM(LOWER(email)) IN ({$in})");
         echo count($inserted_list) . " - newsletters_users<br>";
 
-        foreach ($inserted_list as $inserted)
-        {
+        foreach ($inserted_list as $inserted) {
             unset($array_for_search_duplicate[$inserted['email']]); // tolgo le email gia presenti in `newsletters_users` in modo da lasciare quelle che non sono state ancora inserite;
         }
 
@@ -961,8 +928,7 @@ class Api extends AppModel
 
         $arry_id = []; //ARRAY DEGLI ID PRESENTI IN newsletters_users che derivano da bookers
 
-        foreach ($inserted_list_id as $value)
-        {
+        foreach ($inserted_list_id as $value) {
             $id = $value['id'];
             $arry_id[$id] = $id;
         }
@@ -980,8 +946,7 @@ class Api extends AppModel
         print "<br>";
 
         $filter_to_delete = [];
-        foreach ($list_bookers_deleted as $deleted)
-        {
+        foreach ($list_bookers_deleted as $deleted) {
             $id = $deleted['newsletter_user_id'];
             $filter_to_delete[$id] = $id;
         }
@@ -997,8 +962,7 @@ class Api extends AppModel
         $query = "SELECT newsletter_user_id FROM newsletters_groups_users WHERE newsletter_group_id = '{$id_news_letters}' AND newsletter_user_id IN ({$in_filter})";
         $list_bookers_present = $this->db->select_sql($query);
 
-        foreach ($list_bookers_present as $value)
-        {
+        foreach ($list_bookers_present as $value) {
             $id = $value['newsletter_user_id'];
 
             unset($last_id_insert[$id]);
@@ -1006,8 +970,7 @@ class Api extends AppModel
 
 
         $last = [];
-        foreach ($last_id_insert as $value)
-        {
+        foreach ($last_id_insert as $value) {
             $values = [];
             // $query = "INSERT INTO `newsletters_groups_users` (`newsletter_group_id`, `newsletter_user_id`) VALUES ( '{$id_news_letters}', '{$value}')";
             $values['newsletter_group_id'] = $id_news_letters;
@@ -1039,8 +1002,7 @@ class Api extends AppModel
         $this->db->write_file("_campi_query_", $query);
         $p = $this->db->select_sql($query);
 
-        foreach ($p as $value)
-        {
+        foreach ($p as $value) {
             $res['Booker'] = $value['bookerNome'] . " " . $value['bookerCognome'];
             $res['Email'] = $value['bookerEmail'];
             $res['Telefono'] = $value['bookerTelefono'];
@@ -1073,8 +1035,7 @@ class Api extends AppModel
     {
         $r =  $this->db->select_sql("SELECT * FROM AtletiBAS");
         $res = [];
-        foreach ($r as $key => $value)
-        {
+        foreach ($r as $key => $value) {
             $squadra = $value['Squadra'];
             $atleta =  $value['Atleta'];
             $annoSportivo = $value['AnnoSportivo'];
@@ -1110,8 +1071,7 @@ class Api extends AppModel
 
         $filterNonTesserati = "";
 
-        if (isset($_GET['nonTesserati']))
-        {
+        if (isset($_GET['nonTesserati'])) {
             $filterNonTesserati = " AND subscriber_id = '0'";
         }
 
@@ -1120,14 +1080,17 @@ class Api extends AppModel
 
         $responseAtletiBAS = $this->db->select_sql($query);
 
-        foreach ($responseAtletiBAS as $responseAtleti)
-        {
+        foreach ($responseAtletiBAS as $responseAtleti) {
             $squadra = $responseAtleti['Squadra'];
             $atleta = $responseAtleti['Atleta'];
             $atletiBAS[$squadra][$atleta] = $responseAtleti;
         }
 
         $this->db->write_file("#atletiBAS", $atletiBAS);
+        
+
+        $presidentiSquadre = $this->presidentiSquadre($anno); //GIUSEPE 2025-10-13 -----------------------------------------------------------------------------
+
 
         // -----------------------------------------------------------------------------
 
@@ -1151,32 +1114,28 @@ class Api extends AppModel
 
         $response = $this->db->select_sql($query);
 
-        foreach ($response as $value)
-        {
+        foreach ($response as $value) {
             $squadra = $value['Squadra'];
             $atleta = $value['Atleta'];
             $client_id = -1;
+            $general_counsel_id = -1;
 
             $value['contaAnniTesseramenti'] = 0;
 
-            if (isset($scorriAtleti[$atleta][$squadra]))
-            {
+            if (isset($scorriAtleti[$atleta][$squadra])) {
                 $value['contaAnniTesseramenti'] = $scorriAtleti[$atleta][$squadra]['ContaAnni'];
             }
 
-            if (isset($atletiBAS[$squadra][$atleta]))
-            {
+            if (isset($atletiBAS[$squadra][$atleta])) {
                 $value['BAS'] = $atletiBAS[$squadra][$atleta];
-            }
-            else
-            {
+            } else {
                 continue;
             }
 
 
-            if (isset($responseSquadreBAS[$squadra]))
-            {
+            if (isset($responseSquadreBAS[$squadra])) {
                 $client_id = $responseSquadreBAS[$squadra]['client_id'];
+                $general_counsel_id = $responseSquadreBAS[$squadra]['general_counsel_id'];
             }
 
             //            $res[$squadra][] = $value;
@@ -1184,6 +1143,8 @@ class Api extends AppModel
 
             $res[$squadra]['nome'] = $value['Denominazione'];
             $res[$squadra]['client_id'] = $client_id;
+            $res[$squadra]['general_counsel_id'] = $general_counsel_id;
+            $res[$squadra]['presidente'] = $presidentiSquadre[$squadra];
             $res[$squadra]['atleti'][$atleta] = $value;
         }
 
@@ -1191,6 +1152,44 @@ class Api extends AppModel
         $this->db->write_file("#daTesserare", $res);
         return $res;
     }
+
+    //GIUSEPE 2025-10-13 -----------------------------------------------------------------------------
+    private function presidentiSquadre($anno)
+    {
+        $res = [];
+
+        $query = "
+                    SELECT
+                        #SquadreBAS.*,
+                        SquadreBAS.Squadra,
+                        SquadreBAS.general_counsel_id,
+                        UPPER(Squadre.general_counsel_cf) AS general_counsel_cf,
+                        Squadre.general_counsel_firstname,
+                        Squadre.general_counsel_lastname,
+                        UPPER(Atleti.CodiceFiscale) AS CF,
+                        Atleti.Atleta
+                    FROM
+                        SquadreBAS
+                    INNER JOIN Squadre ON SquadreBAS.Squadra = Squadre.Squadra
+                    LEFT JOIN Atleti ON UPPER(Atleti.CodiceFiscale) = UPPER(Squadre.general_counsel_cf)
+                    WHERE
+                        AnnoSportivo = {$anno}
+                    ORDER BY
+                        Atleti.Atleta ASC
+            ";
+        $response = $this->db->select_sql($query);
+        foreach ($response as $val) {
+
+            $squadra = $val['Squadra'];
+            $res[$squadra] = $val;
+
+        }
+
+        $this->db->write_file("#presidentiSquadre",$res);
+
+        return $res;
+    }
+    //------------------------------------------------------------------------------------------------
 
 
     //GIUSEPPE 2022-09-13 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1232,8 +1231,7 @@ class Api extends AppModel
 
         $max_year = 0;
 
-        foreach ($res_query as $year => $value)
-        {
+        foreach ($res_query as $year => $value) {
             $data_inizio_expl = explode("-", $value['DataInizio']);
 
             $date_init = implode("-", array_reverse($data_inizio_expl));
@@ -1242,22 +1240,19 @@ class Api extends AppModel
 
             $if = $date_init <= $date_now;
 
-            if ((int) $max_year <= (int) $year)
-            {
+            if ((int) $max_year <= (int) $year) {
                 $max_year = $year;
             }
 
 
-            if ((string) $date_init > (string) $date_now)
-            {
+            if ((string) $date_init > (string) $date_now) {
                 $new = $ys;
             }
         }
 
         $index_current = $max_year;
 
-        if (count($new) > 0)
-        {
+        if (count($new) > 0) {
             $index_current = $max_year - 1;
         }
 
@@ -1387,8 +1382,7 @@ class Api extends AppModel
 
         // print_r($query); 
 
-        foreach ($res as $key => $value)
-        {
+        foreach ($res as $key => $value) {
             $campionato = $value['Campionato'];
             $girone_campionato = $value['GironeCampionato'];
 
@@ -1433,8 +1427,7 @@ class Api extends AppModel
                 'PartitaValida' => $value['PartitaValida']
             ];
 
-            if (!isset($selected[$campionato]))
-            {
+            if (!isset($selected[$campionato])) {
 
                 $campionato_array = [
                     'Campionato' => $value['Campionato'],
@@ -1446,8 +1439,7 @@ class Api extends AppModel
                 $selected[$campionato] = $campionato_array;
             }
 
-            if (!isset($selected[$campionato]['Gironi'][$girone_campionato]))
-            {
+            if (!isset($selected[$campionato]['Gironi'][$girone_campionato])) {
                 $selected[$campionato]['Gironi'][$girone_campionato] = $girone;
             }
 
@@ -1550,8 +1542,7 @@ class Api extends AppModel
         //$this->db->write_file("sanzioniQuery", $query);
         $db_res = $this->db->select_sql($query);
 
-        foreach ($db_res as $key => $value)
-        {
+        foreach ($db_res as $key => $value) {
             $campionato = $value['Campionato'];
             $girone = $value['GironeCampionato'];
             $giornata = $value['Giornata'];
@@ -1567,8 +1558,7 @@ class Api extends AppModel
     {
         $not = ['Casa' => 'Trasferta', 'Trasferta' => 'Casa'];
 
-        foreach ($array_calendario as $value)
-        {
+        foreach ($array_calendario as $value) {
             $campionato = $value['Campionato'];
             $girone_campionato = $value['GironeCampionato'];
             $squadra_campionato = $value['SquadraCampionato'];
@@ -1584,15 +1574,13 @@ class Api extends AppModel
             //            $disciplinare_inserita = $value['DisciplinareInserita'];
             $disciplinare_inserita = 0;
 
-            switch ($value['Ammonizione'])
-            {
+            switch ($value['Ammonizione']) {
                 case 'Si':
                     $ammonizione = 1;
                     break;
             }
 
-            switch ($value['Espulsione'])
-            {
+            switch ($value['Espulsione']) {
                 case 'Si':
                     $espulsione = 3;
                     break;
@@ -1686,18 +1674,15 @@ class Api extends AppModel
         $temp = [];
 
         // CREO UNA COPIA DEL CALENDARIO ED ELIMINO LE INFORMAZIONI CHE NON MI INTERESSANO, COMPRESE LE PARTITE, MA LASCIO LE GIORNATE
-        foreach ($calendario_home as $key_campionato => $campionato)
-        {
+        foreach ($calendario_home as $key_campionato => $campionato) {
             unset($calendario_home[$key_campionato]['Campionato']);
             unset($calendario_home[$key_campionato]['Italiana']);
             unset($calendario_home[$key_campionato]['order']);
 
-            foreach ($campionato['Gironi'] as $key_girone => $girone)
-            {
+            foreach ($campionato['Gironi'] as $key_girone => $girone) {
                 unset($calendario_home[$key_campionato]['Gironi'][$key_girone]['GironeCampionato']);
 
-                foreach ($girone['Giornata'] as $key_giornata => &$giornata)
-                {
+                foreach ($girone['Giornata'] as $key_giornata => &$giornata) {
                     $calendario_home[$key_campionato]['Gironi'][$key_girone]['Giornata'][$key_giornata] = [];
                 }
             }
@@ -1725,16 +1710,14 @@ class Api extends AppModel
 
 
 
-            if (!isset($temp[$campionato][$girone_campionato][$value['Atleta']]))
-            {
+            if (!isset($temp[$campionato][$girone_campionato][$value['Atleta']])) {
                 $temp[$campionato][$girone_campionato][$value['Atleta']]['Anagrafica'] = $anagrafica;
                 $temp[$campionato][$girone_campionato][$value['Atleta']]['Squadra'] = $squadra;
                 $temp[$campionato][$girone_campionato][$value['Atleta']]['TOT'] = 0;
             }
 
 
-            if (!isset($temp[$campionato][$girone_campionato][$value['Atleta']]['Giornata'][$giornata]))
-            {
+            if (!isset($temp[$campionato][$girone_campionato][$value['Atleta']]['Giornata'][$giornata])) {
                 $temp[$campionato][$girone_campionato][$value['Atleta']]['Giornata'][$giornata] = 0;
             }
 
@@ -1749,13 +1732,10 @@ class Api extends AppModel
 
         foreach ($temp as $key_campionato => &$campionato) //INSERISCO I GOL NELLE RISPETTIVE GIORNATE
         {
-            foreach ($campionato as $key_girone => &$girone)
-            {
-                foreach ($girone as $key_atleta => &$atleta)
-                {
+            foreach ($campionato as $key_girone => &$girone) {
+                foreach ($girone as $key_atleta => &$atleta) {
                     $tot = 0;
-                    foreach ($atleta['Giornata'] as $giornata => $goal)
-                    {
+                    foreach ($atleta['Giornata'] as $giornata => $goal) {
                         $tot += $goal;
                         $atleta['GiornataC'][$giornata] = $tot;
                         $atleta['GiornataForOrder'][$giornata] = sprintf("%s{#}%s{#}%03d", $atleta['Squadra'], $atleta['Anagrafica'], $tot); //INSEIRSCO GOL, NOME SQUADRA E ANAGRAFICA IN UN UNICA STRINGA PER PROCEDERE POI ALL'ORDINAMENTO
@@ -1770,18 +1750,13 @@ class Api extends AppModel
         //        $this->db->write_file("__atleta_giornate_3_4.json", json_encode($temp));
         //        $this->db->write_file("_struttura_2.json", json_encode($calendario_home));
         //RIEMPO LE GIORNATE SUCCESSIVE: AD ESEMPIO SE UN CALCIATORE HA SEGNATO SOLO NELLA PRIMA GIORNATA, DEVE ESSERE COMUNQUE VISIBILE ANCHE NELLE SUCCESIVE
-        foreach ($calendario_home as $key_campionato => &$campionato)
-        {
-            foreach ($campionato['Gironi'] as $key_girone => &$girone)
-            {
+        foreach ($calendario_home as $key_campionato => &$campionato) {
+            foreach ($campionato['Gironi'] as $key_girone => &$girone) {
                 $to_add = [];
-                foreach ($girone['Giornata'] as $key_giornata => &$giornata)
-                {
+                foreach ($girone['Giornata'] as $key_giornata => &$giornata) {
                     // $giornata = count($giornata);
-                    if (count($giornata) > 0)
-                    {
-                        foreach ($to_add as $key_atleta => $value_atleta)
-                        {
+                    if (count($giornata) > 0) {
+                        foreach ($to_add as $key_atleta => $value_atleta) {
                             if (!isset($giornata[$key_atleta]))
                                 $giornata[$key_atleta] = $value_atleta;
                         }
@@ -1793,18 +1768,13 @@ class Api extends AppModel
 
         //        $this->db->write_file("_struttura_3.json", json_encode($calendario_home));
         // RAGGRUPPO LE STRINGE PER GIORNATA E NUM GOL E POI (NUM GOL DECRESCENTI E LISTA DI STRINGHE IN ORDINE CRESCENTE)
-        foreach ($calendario_home as $key_campionato => &$campionato)
-        {
-            foreach ($campionato['Gironi'] as $key_girone => &$girone)
-            {
+        foreach ($calendario_home as $key_campionato => &$campionato) {
+            foreach ($campionato['Gironi'] as $key_girone => &$girone) {
                 $to_add = [];
-                foreach ($girone['Giornata'] as $key_giornata => &$giornata)
-                {
+                foreach ($girone['Giornata'] as $key_giornata => &$giornata) {
                     // $giornata = count($giornata);
-                    if (count($giornata) > 0)
-                    {
-                        foreach ($giornata as $key_atleta => $value_atleta)
-                        {
+                    if (count($giornata) > 0) {
+                        foreach ($giornata as $key_atleta => $value_atleta) {
                             $value_expl = explode("{#}", $value_atleta);
                             if ($value_expl[2] == "000")
                                 continue;
@@ -1817,8 +1787,7 @@ class Api extends AppModel
                         rsort($k);
 
                         $add_2 = [];
-                        foreach ($k as $points)
-                        {
+                        foreach ($k as $points) {
                             $z = $to_add[$points];
                             $this->bubble_sort($z);
                             $add_2[$points] = $z;
@@ -1850,8 +1819,7 @@ class Api extends AppModel
         $atleti = $this->atleti();
         $this->atleti_array = $atleti;
 
-        foreach ($select_goal_partite as $value)
-        {
+        foreach ($select_goal_partite as $value) {
             $calendario = $value['Calendario'];
 
             $campionato = $select_calendario[$calendario]['Campionato'];
@@ -1864,8 +1832,7 @@ class Api extends AppModel
             if ($value['Atleta'] == 0 || $value['Atleta'] == "")
                 continue;
 
-            if (!isset($temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']]))
-            {
+            if (!isset($temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']])) {
                 $temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']] = [
                     'Goal' => 0,
                     'SquadraCampionato' => $value['SquadraCampionato'],
@@ -1879,8 +1846,7 @@ class Api extends AppModel
             $temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']]['Goal'] += $value['Goal'];
             $temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']]['Giornata'][$giornata] = $temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']]['Goal'];
 
-            if ($temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']]['Goal'] == 0)
-            {
+            if ($temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']]['Goal'] == 0) {
                 unset($temp[$campionato][$girone_campionato]['Atleta'][$value['Atleta']]);
             }
         }
@@ -1888,14 +1854,10 @@ class Api extends AppModel
         $this->db->write_file("__atleta_giornate.json", json_encode($temp));
 
         $temp_2 = [];
-        foreach ($temp as $key_campionato => $campionato)
-        {
-            foreach ($campionato as $key_girone => $girone)
-            {
-                foreach ($girone['Atleta'] as $key_atleta => $atleta)
-                {
-                    foreach ($atleta['Giornata'] as $key_giornata => $goal)
-                    {
+        foreach ($temp as $key_campionato => $campionato) {
+            foreach ($campionato as $key_girone => $girone) {
+                foreach ($girone['Atleta'] as $key_atleta => $atleta) {
+                    foreach ($atleta['Giornata'] as $key_giornata => $goal) {
                         $atleta['Goal'] = $goal;
 
                         $temp_2[$key_campionato][$key_girone][$key_giornata][$key_atleta] = $atleta;
@@ -1906,14 +1868,11 @@ class Api extends AppModel
 
         $this->db->write_file("__atleta_giornate_2.json", json_encode($temp_2));
 
-        foreach ($temp as $key_campionato => $campionato)
-        {
-            foreach ($campionato as $key_girone => $girone)
-            {
+        foreach ($temp as $key_campionato => $campionato) {
+            foreach ($campionato as $key_girone => $girone) {
                 $atleta_array = [];
 
-                foreach ($girone['Atleta'] as $atleta)
-                {
+                foreach ($girone['Atleta'] as $atleta) {
                     $atleta_array[] = $atleta;
                 }
 
@@ -1936,14 +1895,12 @@ class Api extends AppModel
     {
         $temp1 = [];
 
-        foreach ($temp as $key_campionato => $gironi)
-        {
+        foreach ($temp as $key_campionato => $gironi) {
             $keys = array_keys($gironi);
 
             sort($keys);
 
-            foreach ($keys as $key)
-            {
+            foreach ($keys as $key) {
                 $temp1[$key_campionato][$key] = $temp[$key_campionato][$key];
             }
         }
@@ -1962,24 +1919,20 @@ class Api extends AppModel
 
         $len = count($array);
 
-        do
-        {
+        do {
             $exit = true;
-            for ($i = 0; $i < $len - 1; $i++)
-            {
+            for ($i = 0; $i < $len - 1; $i++) {
                 $t = $array[$i];
                 $t_1 = $array[$i + 1];
                 $res = false;
                 $temp;
 
-                if ($index)
-                {
+                if ($index) {
                     $t = $array[$i][$index];
                     $t_1 = $array[$i + 1][$index];
                 }
 
-                switch ($order)
-                {
+                switch ($order) {
                     case 'ASC':
                         $res = $t > $t_1;
                         break;
@@ -1989,8 +1942,7 @@ class Api extends AppModel
                         break;
                 }
 
-                if ($res)
-                {
+                if ($res) {
                     $temp = $array[$i];
                     $array[$i] = $array[$i + 1];
                     $array[$i + 1] = $temp;
@@ -2016,12 +1968,9 @@ class Api extends AppModel
         $pareggi_classifica = [];
         $gruppi_presati = [];
 
-        foreach ($calendario as $key_campionato => $campionato)
-        {
-            foreach ($campionato['Gironi'] as $key_girone => $girone)
-            {
-                foreach ($girone['Squadre'] as $squadra => $nome_squadra)
-                {
+        foreach ($calendario as $key_campionato => $campionato) {
+            foreach ($campionato['Gironi'] as $key_girone => $girone) {
+                foreach ($girone['Squadre'] as $squadra => $nome_squadra) {
                     $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$squadra]['Nome'] = $nome_squadra;
                     $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$squadra]['Punti'] = 0;
                     $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$squadra]['Giocate'] = 0;
@@ -2032,13 +1981,11 @@ class Api extends AppModel
                     $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$squadra]['GoalSubiti'] = 0;
                 }
 
-                foreach ($girone['Giornata'] as $key_giornata => $giornata)
-                {
+                foreach ($girone['Giornata'] as $key_giornata => $giornata) {
 
                     //                    $disc = [];
 
-                    foreach ($giornata['Partita'] as $key_partita => $partita)
-                    {
+                    foreach ($giornata['Partita'] as $key_partita => $partita) {
                         $casa_squadra = $partita['Casa']['Squadra'];
                         $trasferta_squadra = $partita['Trasferta']['Squadra'];
 
@@ -2072,8 +2019,7 @@ class Api extends AppModel
                         $CausRisCasa = 0;
                         $CausRisTrasferta = 0;
 
-                        if ($CausaleRisultato != null)
-                        {
+                        if ($CausaleRisultato != null) {
                             $risCasa = $partita['Casa']['Risultato'];
                             $risTrasferta = $partita['Trasferta']['Risultato'];
 
@@ -2081,19 +2027,13 @@ class Api extends AppModel
 
                             $CausaleRisultatoID = $CausaleRisultato['CausaleRisultato'];
 
-                            if ($CausaleRisultatoID == 9 || $CausaleRisultatoID == 10)
-                            {
+                            if ($CausaleRisultatoID == 9 || $CausaleRisultatoID == 10) {
                                 $CausRisCasa = $puntiDisciplina;
                                 $CausRisTrasferta = $puntiDisciplina;
-                            }
-                            else
-                            {
-                                if ($risCasa < $risTrasferta)
-                                {
+                            } else {
+                                if ($risCasa < $risTrasferta) {
                                     $CausRisCasa = $puntiDisciplina;
-                                }
-                                else
-                                {
+                                } else {
                                     $CausRisTrasferta = $puntiDisciplina;
                                 }
                             }
@@ -2102,8 +2042,7 @@ class Api extends AppModel
 
                         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-                        if (!is_int($casa_goal) && !is_int($trasferta_goal) && !is_int($casa_autogoal) && !is_int($trasferta_autogoal))
-                        {
+                        if (!is_int($casa_goal) && !is_int($trasferta_goal) && !is_int($casa_autogoal) && !is_int($trasferta_autogoal)) {
                             continue;
                         }
 
@@ -2121,9 +2060,8 @@ class Api extends AppModel
 
                         // 2025-02-18 -- validare partite
                         $partita_valida = $partita['PartitaValida'];
-                        if ($casa_risultato > $trasferta_risultato)
-                        {
-                            $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['Punti'] += 3 * $partita_valida;// 2025-02-18 -- validare partite
+                        if ($casa_risultato > $trasferta_risultato) {
+                            $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['Punti'] += 3 * $partita_valida; // 2025-02-18 -- validare partite
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['Vinte'] += 1;
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['GoalFatti'] += $casa_risultato;
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['GoalSubiti'] += $trasferta_risultato;
@@ -2132,9 +2070,8 @@ class Api extends AppModel
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['GoalFatti'] += $trasferta_risultato;
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['GoalSubiti'] += $casa_risultato;
                         }
-                        if ($casa_risultato < $trasferta_risultato)
-                        {
-                            $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['Punti'] += 3 * $partita_valida;// 2025-02-18 -- validare partite
+                        if ($casa_risultato < $trasferta_risultato) {
+                            $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['Punti'] += 3 * $partita_valida; // 2025-02-18 -- validare partite
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['Vinte'] += 1;
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['GoalFatti'] += $trasferta_risultato;
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['GoalSubiti'] += $casa_risultato;
@@ -2144,10 +2081,9 @@ class Api extends AppModel
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['GoalSubiti'] += $trasferta_risultato;
                         }
 
-                        if ($casa_risultato == $trasferta_risultato)
-                        {
-                            $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['Punti'] += 1 * $partita_valida;// 2025-02-18 -- validare partite
-                            $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['Punti'] += 1 * $partita_valida;// 2025-02-18 -- validare partite
+                        if ($casa_risultato == $trasferta_risultato) {
+                            $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['Punti'] += 1 * $partita_valida; // 2025-02-18 -- validare partite
+                            $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['Punti'] += 1 * $partita_valida; // 2025-02-18 -- validare partite
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$casa_squadra]['Nulle'] += 1;
                             $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$trasferta_squadra]['Nulle'] += 1;
 
@@ -2180,15 +2116,13 @@ class Api extends AppModel
 
                     $squadreDisciplinari = $array_disciplinari[$key_campionato][$key_girone][$key_giornata];
 
-                    foreach ($squadreDisciplinari as $key_squadra => $punti_disciplina)
-                    {
+                    foreach ($squadreDisciplinari as $key_squadra => $punti_disciplina) {
                         $calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'][$key_squadra]['CoppaDisciplina'] += $punti_disciplina;
                     }
 
                     $to_sort = [];
 
-                    foreach ($calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'] as $squadre_punti)
-                    {
+                    foreach ($calendario[$key_campionato]['Gironi'][$key_girone]['SquadrePunti'] as $squadre_punti) {
                         $to_sort[] = $squadre_punti;
                     }
 
@@ -2226,10 +2160,8 @@ class Api extends AppModel
     {
         //$this->pesi($to_sort, ['Punti', 'CoppaDisciplina', 'DifferenzaReti', 'GoalFatti'], [8, 4, 2, 1]);
 
-        foreach ($to_sort as &$value)
-        {
-            foreach ($index_array as $key => $index)
-            {
+        foreach ($to_sort as &$value) {
+            foreach ($index_array as $key => $index) {
                 $peso = $pesi_array[$key];
 
                 $value['Pesati'] += $value[$index] * $peso;
@@ -2241,22 +2173,19 @@ class Api extends AppModel
 
         $r = count($to_sort);
         $res = [];
-        for ($i = 0; $i < $r - 1; $i++)
-        {
+        for ($i = 0; $i < $r - 1; $i++) {
             $peso1 = $to_sort[$i]['Pesati'];
             $peso2 = $to_sort[$i + 1]['Pesati'];
             $squadra1 = $to_sort[$i]['Squadra'];
             $squadra2 = $to_sort[$i + 1]['Squadra'];
 
-            if ($peso1 == $peso2)
-            {
+            if ($peso1 == $peso2) {
 
                 if (
                     ($to_sort[$i]['Punti'] == $to_sort[$i + 1]['Punti']) &&
                     ($to_sort[$i]['CoppaDisciplina'] == $to_sort[$i + 1]['CoppaDisciplina']) &&
                     ($key_giornata > 1)
-                )
-                {
+                ) {
                     $res[$key_campionato][$key_girone][$key_giornata][$squadra1 . "-" . $squadra2] = [$to_sort[$i], $to_sort[$i + 1]];
                     $pareggi_classifica[$key_campionato][$key_girone][$key_giornata][$squadra1 . "-" . $squadra2] = array("res" => [$to_sort[$i], $to_sort[$i + 1]], "i" => $i);
 
@@ -2271,14 +2200,10 @@ class Api extends AppModel
     private function scontriDiretti($giocate, $pareggi_classifica, $gruppi_pesati, &$calendario)
     {
 
-        foreach ($pareggi_classifica as $key_campionato => $campionato)
-        {
-            foreach ($campionato as $key_girone => $girone)
-            {
-                foreach ($girone as $key_giornata => $giornata)
-                {
-                    foreach ($giornata as $key_squadre => $partite)
-                    {
+        foreach ($pareggi_classifica as $key_campionato => $campionato) {
+            foreach ($campionato as $key_girone => $girone) {
+                foreach ($girone as $key_giornata => $giornata) {
+                    foreach ($giornata as $key_squadre => $partite) {
                         // es $key_squadre : "3994-5541"
                         // splitto questi due valori
                         //
@@ -2292,8 +2217,7 @@ class Api extends AppModel
 
                         $index_i = $partite['i'];
 
-                        if ($res['vinte'] < $res['perse'])
-                        {
+                        if ($res['vinte'] < $res['perse']) {
                             $sq = explode("-", $key_squadre);
                             print_r("<br>SCAMBIO SCONTRI DIRETTI<br>");
                             print "------------------------------------<br>";
@@ -2308,9 +2232,7 @@ class Api extends AppModel
                             $temp = $calendario[$key_campionato]["Gironi"][$key_girone]["Giornata"][$key_giornata]["Classifica"][$index_i];
                             $calendario[$key_campionato]["Gironi"][$key_girone]["Giornata"][$key_giornata]["Classifica"][$index_i] = $calendario[$key_campionato]["Gironi"][$key_girone]["Giornata"][$key_giornata]["Classifica"][$index_i + 1];
                             $calendario[$key_campionato]["Gironi"][$key_girone]["Giornata"][$key_giornata]["Classifica"][$index_i + 1] = $temp;
-                        }
-                        else
-                        {
+                        } else {
                         }
                     }
                 }
@@ -2329,13 +2251,11 @@ class Api extends AppModel
         if (
             isset($gruppi_pesati[$key_campionato][$key_girone][$key_giornata][$pesati][$quadra_1]) &&
             isset($gruppi_pesati[$key_campionato][$key_girone][$key_giornata][$pesati][$quadra_2])
-        )
-        {
+        ) {
             //controllo che non ci siano piu di due squadre;
             $n = count($gruppi_pesati[$key_campionato][$key_girone][$key_giornata][$pesati]);
 
-            if ($n == 2)
-            {
+            if ($n == 2) {
                 //                print "<br>squadre = 2<br>";
                 $valid = true;
             }
@@ -2358,33 +2278,25 @@ class Api extends AppModel
 
         //        print_r("<br><br>Giornata classifica: {$key_giornata}<br>");
 
-        if (isset($giocate[$key_campionato][$key_girone]['squadra'][$squadre[0]]['vs'][$squadre[1]]))
-        {
+        if (isset($giocate[$key_campionato][$key_girone]['squadra'][$squadre[0]]['vs'][$squadre[1]])) {
             $day = $giocate[$key_campionato][$key_girone]['squadra'][$squadre[0]]['vs'][$squadre[1]]['day'];
 
             //            print_r(" --cmp:{$key_campionato}-gir:{$key_girone}-g:{$key_giornata}--sq:{$key_squadre}--giorno-giocata:{$d}:{$r} <br>");
             //            print_r(" --cmp:{$key_campionato}-gir:{$key_girone}-g:{$key_giornata}--sq:{$key_squadre}<br>");
 
-            foreach ($day as $d => $r)
-            {
-                if ($d > $key_giornata)
-                {
+            foreach ($day as $d => $r) {
+                if ($d > $key_giornata) {
                     //  print_r("&emsp; &emsp; --giorno-giocata:{$d}:{$r}<br>");
                     continue;
                 }
 
-                if ($r > 0)
-                {
+                if ($r > 0) {
                     $res["vinte"]++;
                     $valid = true;
-                }
-                elseif ($r < 0)
-                {
+                } elseif ($r < 0) {
                     $res["perse"]++;
                     $valid = true;
-                }
-                elseif ($r == 0)
-                {
+                } elseif ($r == 0) {
                     $res["pareggiate"]++;
                     $valid = true;
                 }
@@ -2409,8 +2321,7 @@ class Api extends AppModel
     private function creaArrayDisciplinari()
     {
         $res = [];
-        foreach ($this->array_calendario as $riga_calendario)
-        {
+        foreach ($this->array_calendario as $riga_calendario) {
             $campionato = $riga_calendario['Campionato'];
             $girone = $riga_calendario['GironeCampionato'];
             $giornata = $riga_calendario['Giornata'];
@@ -2434,17 +2345,13 @@ class Api extends AppModel
 
         $assegna_calendario = [];
 
-        foreach ($calendario as $key_campionato => $campionato)
-        {
-            foreach ($campionato['Gironi'] as $key_girone => $girone)
-            {
+        foreach ($calendario as $key_campionato => $campionato) {
+            foreach ($campionato['Gironi'] as $key_girone => $girone) {
 
-                foreach ($girone['Giornata'] as $key_day => $giornata)
-                {
+                foreach ($girone['Giornata'] as $key_day => $giornata) {
                     $res[$key_campionato][$key_girone][$key_day] = ["DATE" => []];
 
-                    foreach ($giornata['Partita'] as $key_partita => $partita)
-                    {
+                    foreach ($giornata['Partita'] as $key_partita => $partita) {
                         $res[$key_campionato][$key_girone][$key_day]["DATE"][$partita['DataTimeStamp']] = [];
 
                         $id_calendario = $partita['Calendario'];
@@ -2456,8 +2363,7 @@ class Api extends AppModel
         }
 
 
-        foreach ($this->goal_partite as $goal_partita)
-        {
+        foreach ($this->goal_partite as $goal_partita) {
             $calendario = $goal_partita['Calendario'];
 
             $ammonizione = $goal_partita['Ammonizione'];
@@ -2466,20 +2372,17 @@ class Api extends AppModel
 
             $assegnazione = $assegna_calendario[$calendario];
 
-            if ($ammonizione == 'Si' || $espulsione == 'Si')
-            {
+            if ($ammonizione == 'Si' || $espulsione == 'Si') {
                 $assegnazione = $assegna_calendario[$calendario];
 
                 $giornata = $assegnazione['Giornata'];
 
-                if ($ammonizione == 'Si')
-                {
+                if ($ammonizione == 'Si') {
                     $res[$assegnazione['Campionato']][$assegnazione['Girone']][$giornata]['DB']['Ammonizioni'][] = $goal_partita;
                 }
 
 
-                if ($espulsione == 'Si')
-                {
+                if ($espulsione == 'Si') {
                     $res[$assegnazione['Campionato']][$assegnazione['Girone']][$giornata]['DB']['Espulsioni'][] = $goal_partita;
                 }
             }
@@ -2508,14 +2411,11 @@ class Api extends AppModel
                 foreach ($girone as $key_day => $giornata) //giornata
                 {
 
-                    if (count($espulsioni_data) > 0)
-                    {
-                        foreach ($espulsioni_data as $espulsione)
-                        {
+                    if (count($espulsioni_data) > 0) {
+                        foreach ($espulsioni_data as $espulsione) {
                             $atleta = $espulsione['Atleta'];
 
-                            if ($date_now <= $espulsione_fine)
-                            {
+                            if ($date_now <= $espulsione_fine) {
                                 $periodo = "";
 
                                 $res[$key_campionato][$key_girone][$key_day]['Espulsi'][$atleta] = $this->assegnaEspulsione($espulsione, $periodo);
@@ -2526,8 +2426,7 @@ class Api extends AppModel
                     if (isset($giornata['DB']['Espulsioni'])) //espulsioni
                     {
 
-                        foreach ($giornata['DB']['Espulsioni'] as $espulsione)
-                        {
+                        foreach ($giornata['DB']['Espulsioni'] as $espulsione) {
                             $atleta = $espulsione['Atleta'];
 
                             $giornate_espulsione = $espulsione['EspulsioneGiornate'];
@@ -2536,19 +2435,14 @@ class Api extends AppModel
                             {
                                 $espulsione_fine = $espulsione['EspulsioneFine'];
 
-                                if ($espulsione_fine !== "0000-00-00 00:00:00" || $espulsione_fine !== "")
-                                {
+                                if ($espulsione_fine !== "0000-00-00 00:00:00" || $espulsione_fine !== "") {
 
                                     $this->calcolaScadenzaEspulsione($res, $key_campionato, $key_girone, $key_day, $espulsione, $espulsione_fine);
                                 }
-                            }
-                            else
-                            {
+                            } else {
 
-                                for ($g = 1; $g <= $giornate_espulsione; $g++)
-                                {
-                                    if (isset($res[$key_campionato][$key_girone][$key_day + $g]))
-                                    {
+                                for ($g = 1; $g <= $giornate_espulsione; $g++) {
+                                    if (isset($res[$key_campionato][$key_girone][$key_day + $g])) {
                                         $calcola = $giornate_espulsione - $g + 1;
 
                                         $periodo = (int) $calcola == 1 ? "{$calcola} turno di squalifica" : "{$calcola} turni di squalifica";
@@ -2583,8 +2477,7 @@ class Api extends AppModel
 
         foreach ($res[$key_campionato][$key_girone] as $key_giornata => $giornata) //campionato
         {
-            if ($key_giornata < $key_day)
-            {
+            if ($key_giornata < $key_day) {
                 continue;
             }
 
@@ -2597,8 +2490,7 @@ class Api extends AppModel
 
             $atleta = $espulsione['Atleta'];
 
-            if ($key_date <= $espulsione_fine)
-            {
+            if ($key_date <= $espulsione_fine) {
                 $res[$key_campionato][$key_girone][$key_giornata]['Espulsi'][$atleta] = $this->assegnaEspulsione($espulsione);
             }
         }
@@ -2625,46 +2517,35 @@ class Api extends AppModel
 
     private function calcolaAmmonizioni(&$res)
     {
-        foreach ($res as $key_campionato => $campionato)
-        {
-            foreach ($campionato as $key_girone => $girone)
-            {
+        foreach ($res as $key_campionato => $campionato) {
+            foreach ($campionato as $key_girone => $girone) {
                 $ammonizioni_data = [];
 
-                foreach ($girone as $key_day => $giornata)
-                {
+                foreach ($girone as $key_day => $giornata) {
 
-                    if (count($ammonizioni_data) > 0)
-                    {
+                    if (count($ammonizioni_data) > 0) {
                         $res[$key_campionato][$key_girone][$key_day]['Ammoniti'] = $ammonizioni_data;
                     }
 
-                    if (isset($giornata['DB']['Ammonizioni']))
-                    {
+                    if (isset($giornata['DB']['Ammonizioni'])) {
 
-                        foreach ($giornata['DB']['Ammonizioni'] as $ammonizione)
-                        {
+                        foreach ($giornata['DB']['Ammonizioni'] as $ammonizione) {
                             $atleta = $ammonizione['Atleta'];
 
-                            if (isset($ammonizioni_data[$atleta]))
-                            {
+                            if (isset($ammonizioni_data[$atleta])) {
                                 $ammonizioni_data[$atleta]['Ammonizioni'] += 1;
-                            }
-                            else
-                            { // compongo l'altleta
+                            } else { // compongo l'altleta
                                 $ammonizioni_data[$atleta] = $this->assegnaAmmonizione($ammonizione);
                             }
 
                             $ammonizioni_data[$atleta]['Stato'] = $this->leggiAmmonizione($ammonizioni_data[$atleta]);
 
-                            if ($ammonizioni_data[$atleta]['Stato'] == "Diffidato")
-                            {
+                            if ($ammonizioni_data[$atleta]['Stato'] == "Diffidato") {
                                 $res[$key_campionato][$key_girone][$key_day]['Diffidati'][$atleta] = $ammonizioni_data[$atleta];
 
                                 $res[$key_campionato][$key_girone][$key_day]['Squalificati'][$atleta]['Ammonizioni'] = 2; // capire se far vedere tutte le ammonizione o le 2 per la diffida
                             }
-                            if ($ammonizioni_data[$atleta]['Stato'] == "Squalificato")
-                            {
+                            if ($ammonizioni_data[$atleta]['Stato'] == "Squalificato") {
                                 $res[$key_campionato][$key_girone][$key_day]['Squalificati'][$atleta] = $ammonizioni_data[$atleta];
 
                                 $res[$key_campionato][$key_girone][$key_day]['Squalificati'][$atleta]['Ammonizioni'] = 3; // capire se far vedere tutte le ammonizione o le 3 per la squalifica
@@ -2699,17 +2580,14 @@ class Api extends AppModel
     {
         $res = [];
 
-        if ($ammonizione['Ammonizioni'] == 1)
-        {
+        if ($ammonizione['Ammonizioni'] == 1) {
             $res = "Ammonito";
         }
 
-        if (3 % $ammonizione['Ammonizioni'] == 1)
-        {
+        if (3 % $ammonizione['Ammonizioni'] == 1) {
             $res = "Diffidato";
         }
-        if (3 % $ammonizione['Ammonizioni'] == 0 && $ammonizione['Ammonizioni'] > 1)
-        {
+        if (3 % $ammonizione['Ammonizioni'] == 0 && $ammonizione['Ammonizioni'] > 1) {
             $res = "Squalificato";
         }
 
@@ -2731,13 +2609,10 @@ class Api extends AppModel
 
         $this->db->write_file("bollettini_cal.json", json_encode($calendario));
 
-        foreach ($calendario as $key_campionato => $campionato)
-        {
-            foreach ($campionato['Gironi'] as $key_girone => $girone)
-            {
+        foreach ($calendario as $key_campionato => $campionato) {
+            foreach ($campionato['Gironi'] as $key_girone => $girone) {
 
-                foreach ($girone['Giornata'] as $key_giornata => $giornata)
-                {
+                foreach ($girone['Giornata'] as $key_giornata => $giornata) {
                     $res[$key_campionato][$key_girone][$key_giornata] = "";
                 }
             }
@@ -2756,8 +2631,7 @@ class Api extends AppModel
 
         $bollettini = $this->db->select_sql($query);
 
-        foreach ($bollettini as $bollettino)
-        {
+        foreach ($bollettini as $bollettino) {
             $campionato = $bollettino['Campionato'];
             $girone = $bollettino['GironeCampionato'];
             $giornata = $bollettino['Giornata'];
@@ -2824,14 +2698,12 @@ class Api extends AppModel
     {
         $query = "";
 
-        if (isset($data['city_name']))
-        {
+        if (isset($data['city_name'])) {
             $city = strtolower($data['city_name']);
 
             $query = "SELECT * FROM city WHERE LOWER(city_name) LIKE '{$city}%' ORDER BY city_name ASC";
         }
-        if (isset($data['id']))
-        {
+        if (isset($data['id'])) {
             $id = $data['id'];
 
             $query = "SELECT * FROM city WHERE id = '{$id}' ORDER BY city_name ASC";
@@ -2852,8 +2724,7 @@ class Api extends AppModel
         $atletiForBas = $this->db->select_sql($query);
 
         $n_ = 0;
-        foreach ($atletiForBas as $atleta)
-        {
+        foreach ($atletiForBas as $atleta) {
             $luogoNascita = $atleta['LuogoNascita'];
 
             $q = "SELECT city.*, COUNT(id) as n FROM city WHERE city_name LIKE '{$luogoNascita}'";
@@ -2890,8 +2761,7 @@ class Api extends AppModel
         $atletiForBas = $this->db->select_sql($query);
 
         $n_ = 0;
-        foreach ($atletiForBas as $atleta)
-        {
+        foreach ($atletiForBas as $atleta) {
             $luogoNascita = $atleta['LuogoNascita'];
 
             $q = "SELECT city.*, COUNT(id) as n FROM city WHERE city_name LIKE '{$luogoNascita}'";
@@ -2976,15 +2846,13 @@ class Api extends AppModel
 
         $allCityNoFilter = $this->db->select_sql($query);
 
-        foreach ($allCityNoFilter as $atleta)
-        {
+        foreach ($allCityNoFilter as $atleta) {
             $luogoNascita = $atleta['LuogoNascita'];
 
             $allCity[$luogoNascita][] = $atleta;
         }
 
-        foreach ($allCity as $luogoNascita => $atleta)
-        {
+        foreach ($allCity as $luogoNascita => $atleta) {
             //            $luogoNascita = $atleta['LuogoNascita'];
 
             $luogoNascita = addslashes($luogoNascita);
@@ -3024,15 +2892,13 @@ class Api extends AppModel
 
         $atletiForBasNoFilter = $this->db->select_sql($query);
 
-        foreach ($atletiForBasNoFilter as $atleta)
-        {
+        foreach ($atletiForBasNoFilter as $atleta) {
             $luogoNascita = $atleta['LuogoNascita'];
 
             $atletiForBas[$luogoNascita][] = $atleta;
         }
 
-        foreach ($atletiForBas as $luogoNascita => $atleta)
-        {
+        foreach ($atletiForBas as $luogoNascita => $atleta) {
             //            $luogoNascita = $atleta['LuogoNascita'];
 
             $luogoNascita = addslashes($luogoNascita);
@@ -3056,8 +2922,7 @@ class Api extends AppModel
     public function salvaCittaBasNonAssociate($post)
     {
         $res = [];
-        foreach ($post as $city_id => $value)
-        {
+        foreach ($post as $city_id => $value) {
             $luogoNascita = addslashes($value['nome']);
             $luogoNascitaErrato = addslashes($value['nome_iniziale']);
             $query_edit = "UPDATE `Atleti` SET `CityNascita` = '{$city_id}', `LuogoNascita` = '{$luogoNascita}' WHERE `LuogoNascita` LIKE '{$luogoNascitaErrato}'";
@@ -3086,8 +2951,7 @@ class Api extends AppModel
         $query = "SELECT * FROM `AtletiBAS` WHERE `AnnoSportivo` = '{$anno_sportivo}' AND `Atleta` = {$atleta} AND `Squadra` = {$squadra} ORDER BY `id` DESC";
         $ab = $this->db->select_sql($query);
 
-        if (count($ab) > 0)
-        {
+        if (count($ab) > 0) {
             $query = "UPDATE
                             `AtletiBAS`
                         SET
@@ -3097,17 +2961,14 @@ class Api extends AppModel
                             Atleta = '{$atleta}' AND Squadra = '{$squadra}' AND AnnoSportivo = '{$anno_sportivo}'";
 
             $this->db->my_query($query);
-        }
-        else
-        {
+        } else {
             $values['subscriber_id'] = $subscriber_id;
             $values['card_id'] = $card_id;
             $values['AnnoSportivo'] = "2024";
             $values['Atleta'] = $atleta;
             $values['Squadra'] = $squadra;
 
-            if (is_numeric($card_id))
-            {
+            if (is_numeric($card_id)) {
                 $values['data_tesseramento'] = date("Y-m-d h:i:s");
             }
 
@@ -3152,14 +3013,14 @@ class Api extends AppModel
 
     // GIUSEPPE 2025-09-23 ---------------------------------------------------------
     // controllo che l'assicurazione abbia id 1 o 11
-    public function cercaAssicurazione($atleta,$squadra)
+    public function cercaAssicurazione($atleta, $squadra)
     {
         $res = [
-                    "assicurazione" => 0, 
-                    "invia" => false, 
-                    "insurance"=>""
-                ];
-        
+            "assicurazione" => 0,
+            "invia" => false,
+            "insurance" => ""
+        ];
+
         $anno_sportivo_tot = $this->annoSportivo();
 
         $anno_sportivo = $anno_sportivo_tot["current"]["year"];
@@ -3178,24 +3039,21 @@ class Api extends AppModel
                             Annuario.`Annuario`
                         DESC";
 
-     
+
 
         $res_query = $this->db->select_sql($query);
 
-        if(count($res_query) > 0)
-        {
+        if (count($res_query) > 0) {
             $assicurazione = $res_query[0]['TipoAssicurazione'];
 
             $res["assicurazione"] = $assicurazione;
 
-            if($assicurazione == 1 )
-            {
+            if ($assicurazione == 1) {
                 $res["insurance"] = "BASFIA2";
                 $res["invia"] = true;
             }
 
-            if($assicurazione == 11)
-            {
+            if ($assicurazione == 11) {
                 $res["insurance"] = "BASFIA1";
                 $res["invia"] = true;
             }
@@ -3216,8 +3074,7 @@ class Api extends AppModel
 
         $code = "";
 
-        if (strlen($cognome) < 3)
-        {
+        if (strlen($cognome) < 3) {
             return $this->_addMissingX($cognome);
         }
 
@@ -3225,21 +3082,17 @@ class Api extends AppModel
 
         // Per il calcolo del cognome si prendono le prime
         // 3 consonanti. 
-        for ($i = 0; $i < 3; $i++)
-        {
-            if (array_key_exists($i, $cognome_cons))
-            {
+        for ($i = 0; $i < 3; $i++) {
+            if (array_key_exists($i, $cognome_cons)) {
                 $code .= $cognome_cons[$i];
             }
         }
 
         // Se le consonanti non bastano, vengono prese
         // le vocali nell'ordine in cui compaiono.
-        if (strlen($code) < 3)
-        {
+        if (strlen($code) < 3) {
             $cognome_voc = $this->_getVocali($cognome);
-            while (strlen($code) < 3)
-            {
+            while (strlen($code) < 3) {
                 $code .= array_shift($cognome_voc);
             }
         }
@@ -3255,8 +3108,7 @@ class Api extends AppModel
         // Se il nome inserito e' piu' corto di 3 lettere
         // si aggiungono tante X quanti sono i caratteri
         // mancanti.
-        if (strlen($nome) < 3)
-        {
+        if (strlen($nome) < 3) {
             return $this->_addMissingX($nome);
         }
 
@@ -3265,20 +3117,15 @@ class Api extends AppModel
         // Se le consonanti contenute nel nome sono minori 
         // o uguali a 3 vengono considerate nell'ordine in cui
         // compaiono.
-        if (count($nome_cons) <= 3)
-        {
+        if (count($nome_cons) <= 3) {
             $code = implode('', $nome_cons);
-        }
-        else
-        {
+        } else {
             // Se invece abbiamo almeno 4 consonanti, prendiamo
             // la prima, la terza e la quarta.
-            for ($i = 0; $i < 4; $i++)
-            {
+            for ($i = 0; $i < 4; $i++) {
                 if ($i == 1)
                     continue;
-                if (!empty($nome_cons[$i]))
-                {
+                if (!empty($nome_cons[$i])) {
                     $code .= $nome_cons[$i];
                 }
             }
@@ -3287,11 +3134,9 @@ class Api extends AppModel
         // Se compaiono meno di 3 consonanti nel nome, si
         // utilizzano le vocali, nell'ordine in cui compaiono
         // nel nome.
-        if (strlen($code) < 3)
-        {
+        if (strlen($code) < 3) {
             $nome_voc = $this->_getVocali($nome);
-            while (strlen($code) < 3)
-            {
+            while (strlen($code) < 3) {
                 $code .= array_shift($nome_voc);
             }
         }
@@ -3334,8 +3179,7 @@ class Api extends AppModel
         $code = str_split($codice);
         $sum = 0;
 
-        for ($i = 1; $i <= count($code); $i++)
-        {
+        for ($i = 1; $i <= count($code); $i++) {
             $cifra = $code[$i - 1];
             $sum += ($i % 2) ? $this->_dispari[$cifra] : $this->_pari[$cifra];
         }
@@ -3349,8 +3193,7 @@ class Api extends AppModel
     protected function _addMissingX($string)
     {
         $code = $string;
-        while (strlen($code) < 3)
-        {
+        while (strlen($code) < 3) {
             $code .= 'X';
         }
         return $code;
@@ -3385,10 +3228,8 @@ class Api extends AppModel
     protected function _getLettere($string, array $haystack)
     {
         $letters = array();
-        foreach (str_split($string) as $needle)
-        {
-            if (in_array($needle, $haystack))
-            {
+        foreach (str_split($string) as $needle) {
+            if (in_array($needle, $haystack)) {
                 $letters[] = $needle;
             }
         }

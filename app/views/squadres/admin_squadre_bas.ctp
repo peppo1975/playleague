@@ -310,7 +310,10 @@ $html->script('/js/script_my.js', false); ?>
             <div class="" id="AvvisoTesseramenti" style="display: none; border: 1px solid #ccc; padding: 20px;">
                 <h3 style="padding-bottom: 10px; margin-bottom: 10px;">Associa alla BAS gli atleti in attesa di
                     tesseramento</h3>
-                <p>a questo link: <a href="/apis/atletiBASMassivi" target="_blank">Link pagina tesseramenti</a></p>
+                <!-- <p>a questo link: <a href="/apis/atletiBASMassivi" target="_blank">Link pagina tesseramenti</a></p> -->
+                <!-- //GIUSEPPE 2025-10-13 -->
+                <p>a questo link: <a id="link_pagina_tesseramenti" href="/apis/atletiBASMassivi" target="_blank">Link pagina tesseramenti</a></p>
+                <!-- --------------------- -->
             </div>
         </div>
 
@@ -661,7 +664,10 @@ $html->script('/js/script_my.js', false); ?>
 
 
         var viewAtleti = document.getElementsByClassName('viewAtleti');
-        var objsend = { "squadre": [], "campionati": [] };
+        var objsend = {
+            "squadre": [],
+            "campionati": []
+        };
         Object.keys(viewAtleti).forEach((i) => {
             viewAtleti[i].addEventListener('click', vediAtletiBas);
 
@@ -708,7 +714,10 @@ $html->script('/js/script_my.js', false); ?>
     async function controllaAtletiMaiInseriti(objsend, anno_sportivo) {
 
         var link = "/squadres/controllaAtletiMaiInseriti";
-        var elenco = { "elenco": objsend, "anno_sportivo": anno_sportivo };
+        var elenco = {
+            "elenco": objsend,
+            "anno_sportivo": anno_sportivo
+        };
         const res = await httpPost(link, elenco);
         Object.keys(res).forEach((i) => {
             var value = res[i];
@@ -826,9 +835,18 @@ $html->script('/js/script_my.js', false); ?>
             anno_sportivo
         });
 
+        creaLink(listAtletiSquadra.Squadra.client_id); //GIUSEPPE 2025-10-13 -----------------------------
+
         createTableAtleti(listAtletiSquadra, "tableAtleti", bas);
 
     }
+
+    //GIUSEPPE 2025-10-13 -----------------------------
+    function creaLink(client_id) {
+        let link_pagina_tesseramenti = document.getElementById("link_pagina_tesseramenti");
+        link_pagina_tesseramenti.setAttribute("href", "/apis/atletiBASMassivi/?client_id=" + client_id);
+    }
+    //-------------------------------------------------
 
     function createTableAtleti(listAtletiSquadra, idDiv, bas) {
 
@@ -1078,7 +1096,7 @@ $html->script('/js/script_my.js', false); ?>
     //    }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
+    window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }

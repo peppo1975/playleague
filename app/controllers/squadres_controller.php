@@ -10,9 +10,7 @@ class SquadresController extends AppController
     public $cacheAction = array(
         'albo_doro' => 48000
     );
-    function admin_index()
-    {
-    }
+    function admin_index() {}
 
     function coccarde()
     {
@@ -979,9 +977,9 @@ class SquadresController extends AppController
         $squadre = $this->Squadre->find('all', array(
 
             'conditions' =>
-                array(
-                    'Squadre.Denominazione LIKE' => $_GET['term'] . '%'
-                ),
+            array(
+                'Squadre.Denominazione LIKE' => $_GET['term'] . '%'
+            ),
             'order' => 'Squadre.Denominazione ASC',
             'limit' => '15'
 
@@ -1010,11 +1008,11 @@ class SquadresController extends AppController
         $squadrec = $this->SquadreCampionati->find('all', array(
 
             'conditions' =>
-                array(
-                    'Squadre.Denominazione LIKE' => $_GET['term'] . '%'
+            array(
+                'Squadre.Denominazione LIKE' => $_GET['term'] . '%'
 
 
-                ),
+            ),
             'limit' => '15'
 
         ));
@@ -2153,7 +2151,24 @@ class SquadresController extends AppController
         $anno_sportivo = $post['anno_sportivo'];
         $campionato = $post['campionato'];
 
-        $querySquadre = "SELECT * FROM Squadre WHERE Squadra = '{$squadra}'";
+        // $querySquadre = "SELECT * FROM Squadre WHERE Squadra = '{$squadra}'";
+
+        //GIUSEPPE 2025-10-13 -----------------------------
+        $querySquadre = "SELECT
+                            Squadre.*,
+                            SquadreBAS.client_id
+                        FROM
+                            Squadre
+                        INNER JOIN SquadreBAS ON SquadreBAS.Squadra = Squadre.Squadra
+                        WHERE
+                            Squadre.Squadra = '{$squadra}'
+                        ORDER BY
+                            SquadreBAS.AnnoSportivo
+                        DESC
+                        LIMIT 1";
+
+        //-------------------------------------------------  
+
         $squadraInfo = $this->select_sql($querySquadre)[0];
 
         $query = "  SELECT
@@ -2201,7 +2216,8 @@ class SquadresController extends AppController
             }
         }
 
-        echo json_encode(['Atleti' => $goalPartiteAtleti, 'Squadra' => ["Denominazione" => $squadraInfo['Denominazione'], "ID" => $squadraInfo['Squadra'], "AnnoSportivo" => $anno_sportivo]]);
+        // echo json_encode(['Atleti' => $goalPartiteAtleti, 'Squadra' => ["Denominazione" => $squadraInfo['Denominazione'], "ID" => $squadraInfo['Squadra'], "AnnoSportivo" => $anno_sportivo]]);
+        echo json_encode(['Atleti' => $goalPartiteAtleti, 'Squadra' => ["Denominazione" => $squadraInfo['Denominazione'], "ID" => $squadraInfo['Squadra'], "AnnoSportivo" => $anno_sportivo, "client_id" => $squadraInfo['client_id']]]); //GIUSEPPE 2025-10-13 -----------------------------
 
         exit();
     }
@@ -2233,7 +2249,7 @@ class SquadresController extends AppController
 
         // cerco gli atleti in queste SquadreCampionato
         $SquadreCampionati = array_keys($res);
-        $filterSquadreCampionati = implode(',',$SquadreCampionati);
+        $filterSquadreCampionati = implode(',', $SquadreCampionati);
         $query = "  SELECT
                         Atleta,
                         Annuario.SquadraCampionato,
@@ -2244,7 +2260,7 @@ class SquadresController extends AppController
                     WHERE
                         Annuario.SquadraCampionato IN({$filterSquadreCampionati})";
 
-        $res = $this->key_select($this->select_sql($query),'Atleta');
+        $res = $this->key_select($this->select_sql($query), 'Atleta');
 
 
         // vedo tutti gli atleti inseriti nella bas

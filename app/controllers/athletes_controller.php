@@ -3952,7 +3952,7 @@ La segreteria
 								$simboloExcel = strtoupper(trim((string)$infoAtleta['TipoAssicurazione']));
 							}
 
-							// default BP=1 se simbolo mancante/non valido
+							// default OKB=1 se simbolo mancante/non valido
 							$tipoAssicurazioneId = 1;
 							if ($simboloExcel !== '' && isset($mapSimboloToId[$simboloExcel])) {
 								$tipoAssicurazioneId = $mapSimboloToId[$simboloExcel];
@@ -3962,7 +3962,7 @@ La segreteria
 									$res['warning_tipo_ass'][] = array(
 										'AtletaId' => $Atleta,
 										'Simbolo'  => $simboloExcel,
-										'Msg'      => 'Simbolo assicurazione non riconosciuto: uso default BP (1)'
+										'Msg'      => 'Simbolo assicurazione non riconosciuto: uso default OKB (1)'
 									);
 								}
 							}

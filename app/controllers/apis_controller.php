@@ -1152,8 +1152,10 @@ class ApisController extends AppController
     public function testHelloGest()
     {
 
-        $serverSendData = "https://hellogest.com/api/client/create";
-
+        // $serverSendData = "https://hellogest.com/api/client/create";
+        // $serverSendData = $this->getConnectBAS()['url']."/api/client/create";
+        $serverSendData = $this->getConnectBAS()['url']."/apps";
+echo $serverSendData; 
         $user = '{
                     "name": "test uno",
                     "constitution_date": "2022-02-02",
@@ -1176,6 +1178,7 @@ class ApisController extends AppController
                 }
 ';
 
+
         //        echo $user;
         $userArray = json_decode($user, true);
         echo "<br>";
@@ -1184,10 +1187,14 @@ class ApisController extends AppController
         echo "<br>";
         echo "<br>";
 
+
+
         $token = $this->auth();
 
-        $ch = curl_init();
+      
 
+        $ch = curl_init();
+ 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         curl_setopt($ch, CURLOPT_URL, $serverSendData);
@@ -1204,10 +1211,13 @@ class ApisController extends AppController
             )
         );
 
+
+
+
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
 
         $response = curl_exec($ch);
-
+  
         print_r($response);
 
         echo PHP_EOL;
@@ -1432,6 +1442,8 @@ class ApisController extends AppController
 
         $this->write_file("_atleti_annuario", $res);
 
+        $client_id = isset($_GET['client_id']) ? $_GET['client_id'] : ""; //GIUSEPPE 2025-10-13
+
         include __DIR__ . "/../views/apis/ateltiBASMassivi/ateltiBASMassivi.ctp";
 
         exit();
@@ -1472,11 +1484,15 @@ class ApisController extends AppController
         // -----------------------------------------------------------------------------
 
 
-        $query = "SELECT * FROM AtletiBAS WHERE Atleta = '{$atleta}' AND Squadra = '{$squadra}'";
-        $res = $this->key_select($this->select_sql($query), 'AnnoSportivo');
+        $query = "SELECT * FROM AtletiBAS WHERE Atleta = '{$atleta}' AND Squadra = '{$squadra}' ORDER BY AnnoSportivo DESC";
+
+
+        // $res = $this->key_select($this->select_sql($query), 'AnnoSportivo');
+        $res = $this->select_sql($query);
 
 
         if (count($res) > 1) {
+
             $this->renewAtletaBas($post, $res);
             exit();
         }
@@ -1491,7 +1507,7 @@ class ApisController extends AppController
 
 
         $client_id = $post['client_id'];
-        $serverSendData = $this->getConnectBAS()['url'] . "/api/client/{$client_id}/subscriber";
+        $serverSendData = testHell . "/api/client/{$client_id}/subscriber";
 
 
 
@@ -1557,12 +1573,12 @@ class ApisController extends AppController
         //ob_start();
 
         $api = new Api();
-        $client_id = "";
+        $client_id = $post['client_id'];
         $subscriber_id = "";
         $atleta_bas = [];
 
 
-
+        $this->write_file("query_bas_res", $res);
 
 
         // GIUSEPPE 2025-09-23 ---------------------------------------------------------
@@ -1586,20 +1602,32 @@ class ApisController extends AppController
 
         $idAtletaBasRenew = $res[$anno]['id'];
 
-        unset($res[$anno]); // mi serve sapere l'ultimo subscriber id
+        //unset($res[$anno]); // mi serve sapere l'ultimo subscriber id
 
-        $last_year = max(array_keys($res));
+        $this->write_file("query_bas_res_array_keys", array_keys($res));
+
+
+        foreach (array_keys($res) as $year) {
+            if ($res[$year]['subscriber_id'] == 0)
+                continue;
+
+            $subscriber_id = $res[$year]['subscriber_id'];
+        }
+
+    
+
+        // $last_year = max(array_keys($res));
 
 
 
         //echo json_encode([$res, $post, $last_year, $idAtletaBasRenew]);
 
-        $client_id = $post['client_id'];
-        $subscriber_id = $res[$last_year]['subscriber_id'];
+        //$client_id = $post['client_id'];
+        // $subscriber_id = $res[$last_year]['subscriber_id'];
 
-        if ($post['subscriber_id'] > 0 && $post['card_id'] == 0) { // se il subscriber_id > 0 e card_id == 0 bisogna ripetere con un rinnovo // bug di hellogest
-            $subscriber_id = $post['subscriber_id'];
-        }
+        // if ($post['subscriber_id'] > 0 && $post['card_id'] == 0) { // se il subscriber_id > 0 e card_id == 0 bisogna ripetere con un rinnovo // bug di hellogest
+        //     $subscriber_id = $post['subscriber_id'];
+        // }
 
         $atleta_bas['birthday'] = $post['data_nascita'];
         $atleta_bas['firstname'] = $post['nome']; //"Matteo";
@@ -1611,8 +1639,8 @@ class ApisController extends AppController
 
         $this->logBas($atleta_bas); // GIUSEPPE 2025-09-23 ---------------------------------------------------------
 
-        $serverSendData = $this->getConnectBAS()['url'] . "/api/client/{$client_id}/subscriber/{$subscriber_id}/renew";
-        //$this->write_file('link', $serverSendData);
+        $serverSendData = testHell . "/api/client/{$client_id}/subscriber/{$subscriber_id}/renew";
+        $this->write_file('query_bas_link', $serverSendData);
 
         $data_string = json_encode($atleta_bas);
 
@@ -1708,7 +1736,7 @@ class ApisController extends AppController
     /*
 
 
-      $serverSendData = $this->getConnectBAS()['url'] . "/api/client/{$client_id}/subscriber";
+      $serverSendData = testHell . "/api/client/{$client_id}/subscriber";
 
       //        $atleta_bas_json = json_encode($atleta_bas);
       //        echo $serverURL;
