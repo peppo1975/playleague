@@ -1507,7 +1507,7 @@ echo $serverSendData;
 
 
         $client_id = $post['client_id'];
-        $serverSendData = testHell . "/api/client/{$client_id}/subscriber";
+        $serverSendData = $this->getConnectBAS()['url']  . "/api/client/{$client_id}/subscriber";
 
 
 
@@ -1639,7 +1639,7 @@ echo $serverSendData;
 
         $this->logBas($atleta_bas); // GIUSEPPE 2025-09-23 ---------------------------------------------------------
 
-        $serverSendData = testHell . "/api/client/{$client_id}/subscriber/{$subscriber_id}/renew";
+        $serverSendData = $this->getConnectBAS()['url']  . "/api/client/{$client_id}/subscriber/{$subscriber_id}/renew";
         $this->write_file('query_bas_link', $serverSendData);
 
         $data_string = json_encode($atleta_bas);
@@ -1736,7 +1736,7 @@ echo $serverSendData;
     /*
 
 
-      $serverSendData = testHell . "/api/client/{$client_id}/subscriber";
+      $serverSendData = $this->getConnectBAS()['url']  . "/api/client/{$client_id}/subscriber";
 
       //        $atleta_bas_json = json_encode($atleta_bas);
       //        echo $serverURL;

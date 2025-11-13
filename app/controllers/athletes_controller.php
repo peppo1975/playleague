@@ -3953,7 +3953,7 @@ La segreteria
 							}
 
 							// default OKB=1 se simbolo mancante/non valido
-							$tipoAssicurazioneId = 1;
+							$tipoAssicurazioneId = 19;
 							if ($simboloExcel !== '' && isset($mapSimboloToId[$simboloExcel])) {
 								$tipoAssicurazioneId = $mapSimboloToId[$simboloExcel];
 							} else {
@@ -3962,7 +3962,7 @@ La segreteria
 									$res['warning_tipo_ass'][] = array(
 										'AtletaId' => $Atleta,
 										'Simbolo'  => $simboloExcel,
-										'Msg'      => 'Simbolo assicurazione non riconosciuto: uso default OKB (1)'
+										'Msg'      => 'Simbolo assicurazione non riconosciuto: uso default AA (id > 19)'
 									);
 								}
 							}

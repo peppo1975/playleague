@@ -1087,7 +1087,7 @@ class Api extends AppModel
         }
 
         $this->db->write_file("#atletiBAS", $atletiBAS);
-        
+
 
         $presidentiSquadre = $this->presidentiSquadre($anno); //GIUSEPE 2025-10-13 -----------------------------------------------------------------------------
 
@@ -1182,10 +1182,9 @@ class Api extends AppModel
 
             $squadra = $val['Squadra'];
             $res[$squadra] = $val;
-
         }
 
-        $this->db->write_file("#presidentiSquadre",$res);
+        $this->db->write_file("#presidentiSquadre", $res);
 
         return $res;
     }
@@ -3025,6 +3024,21 @@ class Api extends AppModel
 
         $anno_sportivo = $anno_sportivo_tot["current"]["year"];
 
+        // $query = "      SELECT
+        //                     Annuario.TipoAssicurazione
+        //                 FROM
+        //                     `Annuario`
+        //                 INNER JOIN SquadreCampionati ON SquadreCampionati.SquadraCampionato = Annuario.SquadraCampionato
+        //                 INNER JOIN Campionati ON Campionati.Campionato = SquadreCampionati.Campionato
+        //                 WHERE
+        //                     Campionati.AnnoSportivo = '{$anno_sportivo}' AND Annuario.Atleta = {$atleta} AND SquadreCampionati.Squadra = '{$squadra}'
+        //                 GROUP BY
+        //                     Annuario.TipoAssicurazione
+        //                 ORDER BY
+        //                     Annuario.`Annuario`
+        //                 DESC";
+
+
         $query = "      SELECT
                             Annuario.TipoAssicurazione
                         FROM
@@ -3032,32 +3046,62 @@ class Api extends AppModel
                         INNER JOIN SquadreCampionati ON SquadreCampionati.SquadraCampionato = Annuario.SquadraCampionato
                         INNER JOIN Campionati ON Campionati.Campionato = SquadreCampionati.Campionato
                         WHERE
-                            Campionati.AnnoSportivo = '{$anno_sportivo}' AND Annuario.Atleta = {$atleta} AND SquadreCampionati.Squadra = '{$squadra}'
+                            Campionati.AnnoSportivo = '{$anno_sportivo}' AND Annuario.Atleta = {$atleta}
                         GROUP BY
                             Annuario.TipoAssicurazione
                         ORDER BY
-                            Annuario.`Annuario`
+                            Annuario.`TipoAssicurazione`
                         DESC";
 
 
+        $res_query = $this->db->key_select($this->db->select_sql($query), 'TipoAssicurazione');
 
-        $res_query = $this->db->select_sql($query);
+
+
+        // if (count($res_query) > 0) {
+        //     $assicurazione = $res_query[0]['TipoAssicurazione'];
+
+        //     $res["assicurazione"] = $assicurazione;
+
+        //     if ($assicurazione == 1) {
+        //         $res["insurance"] = "BASFIA2";
+        //         $res["invia"] = true;
+        //     }
+
+        //     if ($assicurazione == 11) {
+        //         $res["insurance"] = "BASFIA1";
+        //         $res["invia"] = true;
+        //     }
+        // }
+
 
         if (count($res_query) > 0) {
-            $assicurazione = $res_query[0]['TipoAssicurazione'];
 
-            $res["assicurazione"] = $assicurazione;
-
-            if ($assicurazione == 1) {
+            //Base PAGATA
+            if (isset($res_query[1])) {
+                $assicurazione = 1;
                 $res["insurance"] = "BASFIA2";
                 $res["invia"] = true;
             }
 
-            if ($assicurazione == 11) {
+            //INTEGRATIVA NON PAGATA
+            if (isset($res_query[19])) {
+                $res = [
+                    "assicurazione" => 0,
+                    "invia" => false,
+                    "insurance" => ""
+                ];
+            }
+
+            //INTEGRATIVA PAGATA
+            if (isset($res_query[11]) || isset($res_query[19])) {
+                $assicurazione = 11;
                 $res["insurance"] = "BASFIA1";
                 $res["invia"] = true;
             }
         }
+
+        $res["assicurazione"] = $assicurazione;
 
         return $res;
     }
