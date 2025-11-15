@@ -3085,16 +3085,16 @@ class Api extends AppModel
             }
 
             //INTEGRATIVA NON PAGATA
-            if (isset($res_query[19])) {
-                $res = [
-                    "assicurazione" => 0,
-                    "invia" => false,
-                    "insurance" => ""
-                ];
-            }
+            // if (isset($res_query[19])) {
+            //     $res = [
+            //         "assicurazione" => 0,
+            //         "invia" => false,
+            //         "insurance" => ""
+            //     ];
+            // }
 
             //INTEGRATIVA PAGATA
-            if (isset($res_query[11]) || isset($res_query[19])) {
+            if (isset($res_query[11])) {
                 $assicurazione = 11;
                 $res["insurance"] = "BASFIA1";
                 $res["invia"] = true;
